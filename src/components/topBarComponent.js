@@ -14,7 +14,7 @@ function TopBarComponent(props){
                         </td>
 
                         <td>
-                            <div className='cmd-area' style={props.cmdText ? {color: 'white'} : {color: 'white'}}>
+                            <div className='cmd-area' style={props.cmdText ? {color: 'white'} : {color: 'grey'}}>
                                 {props.cmdText ? props.cmdText : 'say something...'}
                             </div>
                         </td>
