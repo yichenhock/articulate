@@ -66,7 +66,14 @@ function CanvasComponent(props) {
 		console.log(JSON.stringify(currentPos));
 	};
 
-	return <Sketch setup={setup} draw={draw} />;
+	const keyPressed = (p5) => {
+        if (p5.key === 'ArrowUp') commandQueue.push("up");
+        else if (p5.key === 'ArrowDown') commandQueue.push("down");
+        else if (p5.key === 'ArrowRight') commandQueue.push("right");
+        else if (p5.key === 'ArrowLeft') commandQueue.push("left");
+    }
+
+    return <Sketch setup={setup} draw={draw} keyPressed={keyPressed} />;
 };
 
 export default CanvasComponent; 
