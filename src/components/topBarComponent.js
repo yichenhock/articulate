@@ -13,8 +13,8 @@ function TopBarComponent(props){
                 </td>
 
                 <td>
-                    <div className='cmd-area'>
-                    hi
+                    <div className='cmd-area' style={props.cmdText=='' ? {color: 'grey'}:{color: 'white'}}>
+                        {props.cmdText=='' ? 'say something...':props.cmdText}
                     </div>
                 </td>
 
