@@ -1,5 +1,5 @@
 
-const commands = {
+export const commands = {
     LEFT: 'left',
     RIGHT: 'right',
     UP: 'up',
@@ -20,7 +20,7 @@ const commandWords = new Map([
   ['blue', commands.BLUE],
 ]);
 
-function subscribeToVoiceCommands(onCommand) {
+export function subscribeToVoiceCommands(onCommand) {
   // more boilerplate to support safari
   navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
     if (!MediaRecorder.isTypeSupported('audio/webm')) return alert('Browser not supported');
