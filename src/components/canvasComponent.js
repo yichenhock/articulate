@@ -28,9 +28,9 @@ function CanvasComponent(props) {
 	const handleCommand = (command, p5) => {
 		switch (command) {
 		case commands.UP:
-		case "down":
-		case "left":
-		case "right":
+		case commands.DOWN:
+		case commands.LEFT:
+		case commands.RIGHT:
 			currentDelta = updateDelta(command, currentDelta);
 			movePen(p5);
 			break;
