@@ -1,5 +1,14 @@
 we in here
 
+
+
+## setup:
+
+Add `.env` in toplevel directory with a [deepgram API key](https://console.deepgram.com/signup):
+```
+REACT_APP_DEEPGRAM_API_KEY=<key here>
+```
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
