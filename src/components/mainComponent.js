@@ -1,8 +1,11 @@
 import React from 'react';
+import CanvasComponent from './canvasComponent';
 
-function Welcome(props) {
-    return <h1>Hello, {props.name}</h1>;
+function MainComponent() {
+    return (
+      <CanvasComponent/>
+    );
   }
 
 
-export default Welcome; 
+export default MainComponent; 
