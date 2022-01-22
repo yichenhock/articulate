@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 
 const commands = {
     LEFT: 'left',
@@ -21,10 +21,8 @@ const commandWords = new Map([
   ['blue', commands.BLUE],
 ]);
 
-// TODO: pass to pj5s
-let commandQueue = [];
-
 function VoiceCommandComponent() {
+  
   useEffect(() => {
     // more boilerplate to support safari
     navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
@@ -51,7 +49,7 @@ function VoiceCommandComponent() {
       const url = baseUrl + '?' + params.toString();
       console.log(url);
       
-      const socket = new WebSocket(url, ['token', DEEPGRAM_KEY]);
+      const socket = new WebSocket(url, ['token', process.env.REACT_APP_DEEPGRAM_API_KEY]);
 
       // 100 - 1000 sensible range
       const sendInterval_ms = 250;
@@ -78,10 +76,13 @@ function VoiceCommandComponent() {
           }
         }
 
-        for (const command of commands) {
-          commandQueue.push(command);
-        }
-
+        console.log(newCommandLog);
+        // let newCommandLog = commandLog.slice();
+        // for (const command of commands) {
+        //   // commandQueue.push(command);
+        //   newCommandLog.push(command);
+        // }
+        // setCommandLog(newCommandLog);
       };
  
       return () => {
