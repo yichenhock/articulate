@@ -51,6 +51,9 @@ function CanvasComponent(props) {
 		if (currentPos.y < 0) currentPos.y = 0;
 		if (currentPos.y >= canvasWidth) currentPos.y = canvasHeight - 1;
 
+		if (typeof currentPos.x !== 'number' || typeof currentPos.y !== 'number') {
+			console.log('bad currentPos: ' + JSON.stringify(currentPos));
+		}
 	};
 
 	const draw = (p5) => {
@@ -64,7 +67,14 @@ function CanvasComponent(props) {
 		}
 	};
 
-	return <Sketch setup={setup} draw={draw} />;
+	const keyPressed = (p5) => {
+        if (p5.key === 'ArrowUp') commandQueue.push("up");
+        else if (p5.key === 'ArrowDown') commandQueue.push("down");
+        else if (p5.key === 'ArrowRight') commandQueue.push("right");
+        else if (p5.key === 'ArrowLeft') commandQueue.push("left");
+    }
+
+    return <Sketch setup={setup} draw={draw} keyPressed={keyPressed} />;
 };
 
 export default CanvasComponent; 
