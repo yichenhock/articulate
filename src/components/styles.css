@@ -1,0 +1,19 @@
+html, body, #root {
+    height: 100%;
+    margin: 0;
+}
+
+.grid-area {
+    min-height: 100vh;
+    min-width: 100vw;
+    background-color: rgb(39, 39, 39);
+}
+
+.canvas-area{
+    position: absolute;
+    text-align: center;
+    margin:0;
+    top: 50%;
+    left:50%;
+    transform: translate(-50%,-50%);
+}
