@@ -9,6 +9,7 @@ export const commands = {
     BLUE: 'blue'
 };
 
+// maps spoken words to commands
 const commandWords = new Map([
   ['right', commands.RIGHT],
   ['write', commands.RIGHT],
@@ -23,7 +24,7 @@ const commandWords = new Map([
 ]);
 
 export function subscribeToVoiceCommands(onCommand) {
-  // more boilerplate to support safari
+  // TODO: more boilerplate to support safari
   navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
     if (!MediaRecorder.isTypeSupported('audio/webm')) return alert('Browser not supported');
     const mic = new MediaRecorder(stream, { mimeType: 'audio/webm' });
@@ -36,13 +37,12 @@ export function subscribeToVoiceCommands(onCommand) {
     // don't provide interim results?
     // punctuate?
 
-    // const keywords = [...commandWords.keys()];
+    const keywords = [...commandWords.keys()];
 
     const baseUrl = 'wss://api.deepgram.com/v1/listen';
     const params = new URLSearchParams([
-    ['language', 'en-GB']
-    ] 
-    // + keywords.map((keyword) => ['keyword', keyword])
+        ['language', 'en-GB']
+      ] // + keywords.map((keyword) => ['search', keyword])
     );
 
     const url = baseUrl + '?' + params.toString();
@@ -51,7 +51,7 @@ export function subscribeToVoiceCommands(onCommand) {
     const socket = new WebSocket(url, ['token', process.env.REACT_APP_DEEPGRAM_API_KEY]);
 
     // 100 - 1000 sensible range
-    const sendInterval_ms = 250;
+    const sendInterval_ms = 100;
 
     const sendData = event => socket.send(event.data);
     socket.onopen = () => {

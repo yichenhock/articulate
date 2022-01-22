@@ -62,8 +62,6 @@ function CanvasComponent(props) {
 			props.setCommand(command);
 			handleCommand(command, p5);
 		}
-
-		console.log(JSON.stringify(currentPos));
 	};
 
 	return <Sketch setup={setup} draw={draw} />;
