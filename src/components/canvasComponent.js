@@ -51,6 +51,9 @@ function CanvasComponent(props) {
 		if (currentPos.y < 0) currentPos.y = 0;
 		if (currentPos.y >= canvasWidth) currentPos.y = canvasHeight - 1;
 
+		if (typeof currentPos.x !== 'number' || typeof currentPos.y !== 'number') {
+			console.log('bad currentPos: ' + JSON.stringify(currentPos));
+		}
 	};
 
 	const draw = (p5) => {
