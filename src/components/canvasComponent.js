@@ -2,7 +2,7 @@ import React from "react";
 import Sketch from "react-p5";
 import Vector from "../drawVector"
 import { updateDelta } from "../drawVector"
-import { subscribeToVoiceCommands, commands } from "./voiceCommands";
+import { subscribeToVoiceCommands, commands } from "../voiceCommands";
 
 const canvasWidth = 750;
 const canvasHeight = 500;
