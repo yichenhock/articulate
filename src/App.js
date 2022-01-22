@@ -1,4 +1,3 @@
-import './App.css';
 import MainComponent from './components/mainComponent.js'
 
 function App() {

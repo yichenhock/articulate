@@ -1,12 +1,64 @@
-html, body, #root {
+.App, html, body, #root {
     height: 100%;
     margin: 0;
+    overflow: hidden;
+}
+
+.Navbar {
+    background-color: rgb(29, 29, 29);
+    position: fixed;
+    top: 0;
+    left: auto;
+    right: 0;
+    box-sizing: border-box;
+    font-size: 18px;
+    font-weight: bold;
+    font-family: Roboto;
+    width: 100%;
+    z-index: 1000;
+    box-shadow: 0px 0px 5px black;
+}
+
+.Toolbar {
+    display: flex;
+    min-height: 56px;
+    align-items: center;
+    padding: 0px 10px;
+}
+
+.toolbar-content{
+    /* display: flex; */
+    width: 100vw;
+}
+
+.logo{ 
+    height: 40px;
+}
+
+.cmd-area{
+    height:40px;
+    width:30vw;
+    min-width: 300px;
+    background-color: rgb(43, 43, 43);
+    border-radius: 20px;
+    text-align: center;
+    color: white;
+    font-family: 'courier';
+    line-height: 40px;
+    /* justify-content: center; */
+
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
 }
 
 .grid-area {
     min-height: 100vh;
     min-width: 100vw;
-    background-color: rgb(39, 39, 39);
+    background-color: rgb(31, 31, 31);
+    z-index: 1;
 }
 
 .canvas-area{
