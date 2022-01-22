@@ -14,6 +14,8 @@ const commandWords = new Map([
   ['write', commands.RIGHT],
   ['left', commands.LEFT],
   ['up', commands.UP],
+  ['upward', commands.UP],
+  ['upwards', commands.UP],
   ['down', commands.DOWN],
   ['red', commands.RED],
   ['yellow', commands.YELLOW],
@@ -34,7 +36,7 @@ export function subscribeToVoiceCommands(onCommand) {
     // don't provide interim results?
     // punctuate?
 
-    const keywords = [...commandWords.keys()];
+    // const keywords = [...commandWords.keys()];
 
     const baseUrl = 'wss://api.deepgram.com/v1/listen';
     const params = new URLSearchParams([
