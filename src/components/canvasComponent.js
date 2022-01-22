@@ -59,6 +59,7 @@ function CanvasComponent(props) {
 		
 		while (commandQueue.length > 0) {
 			const command = commandQueue.shift();
+			props.setCommand(command);
 			handleCommand(command, p5);
 		}
 
