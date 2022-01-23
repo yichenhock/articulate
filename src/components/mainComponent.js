@@ -5,16 +5,22 @@ import TopBarComponent from './topBarComponent';
 import ColourPalette from './colourPaletteComponent';
 import HelpOverlay from './helpOverlayComponent';
 import './styles.css'
+import { CommandContext } from './commandContext';
 
 function MainComponent() {
 
   const [mixing, setMixing] = useState(false); 
+  
   const [helpDisplay, setHelpDisplay] = useState(false); 
 
   return (
     <div className='App'>
       <div className='top-bar'>
-        <TopBarComponent cmdText='' helpDisplay={helpDisplay} setHelpDisplay={setHelpDisplay}/>
+        <CommandContext.Consumer>
+          {({ command }) => (
+            <TopBarComponent cmdText={command} helpDisplay={helpDisplay} setHelpDisplay={setHelpDisplay}/>
+          )}
+        </CommandContext.Consumer>
       </div>
       
       <div style={helpDisplay ? {display:'block'} : {display:'none'}}>
@@ -28,7 +34,11 @@ function MainComponent() {
         
         
         <div className='canvas-area'>
-          <CanvasComponent/>
+        <CommandContext.Consumer>
+          {({ setCommand }) => (
+            <CanvasComponent setCommand={setCommand}/>
+          )}
+        </CommandContext.Consumer>
         </div>
         
 

@@ -17,7 +17,7 @@ function magnitude(vector) {
 function normalise(vector) {
     let mag = magnitude(vector);
     if(mag==0) return vector
-    console.log("Normalized to " + vector.x / mag)
+    //console.log("Normalized to " + vector.x / mag)
     return new Vector(vector.x / mag, vector.y / mag);
 }
 

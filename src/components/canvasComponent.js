@@ -281,7 +281,7 @@ function CanvasComponent(props) {
 				let region_data = getRegionSeedAndSize(p5, p5.createVector(x, y), drawing_layer)
 				let region = new Region(region_data[0], region_data[1], region_data[0], x, y)
 
-				console.log("The region at " + x + ", " + y + " is " + region.seed + ", size " + region.size)
+				//console.log("The region at " + x + ", " + y + " is " + region.seed + ", size " + region.size)
 
 				if (region.size >= min_region_size && !(region.seed in discovered_region_seeds)) {
 					discovered_region_seeds.add(region.seed)
@@ -340,7 +340,7 @@ function CanvasComponent(props) {
 		let newY = currentPos.y + currentDelta.y * velocity;
 		if (paint) {
 			// p5.line(currentPos.x, currentPos.y, newX, newY);
-			drawing_layer.noSmooth();
+			//drawing_layer.noSmooth();
 			drawing_layer.line(currentPos.x, currentPos.y, newX, newY);
 		}
 		currentPos.x = newX;
@@ -363,6 +363,7 @@ function CanvasComponent(props) {
 		else if (p5.key == 'ArrowLeft') commandQueue.push("left");
 		else if (p5.key == 'r') commandQueue.push("regions");
 		else if (p5.key == 'f') commandQueue.push("fill");
+		else if (p5.key == 'g') commandQueue.push("go");
 		else if (p5.key == '0') commandQueue.push("zero");
 		else if (p5.key == '1') commandQueue.push("one");
 		else if (p5.key == '2') commandQueue.push("two");
