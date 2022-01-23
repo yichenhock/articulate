@@ -12,9 +12,9 @@ const canvasHeight = 500;
 let currentPos = new Vector(canvasWidth / 2, canvasHeight / 2);
 let currentDelta = new Vector(0, 1);
 
-let velocity = 0.18;
+let velocity = 0.19;
 let velocityIncrement = 0.2;
-let maxVelocity = 0.3;
+let maxVelocity = 0.5;
 
 let paint = true;
 let going = false;
@@ -37,6 +37,7 @@ let discovered_region_objs = [];
 
 let drawing_layer;
 let text_layer;
+let mouse_layer;
 
 class Region {
 	constructor(name, size, seed, x, y) {
@@ -55,9 +56,11 @@ function CanvasComponent(props) {
 		p5.pixelDensity(1);
 		p5.createCanvas(canvasWidth, canvasHeight).parent(canvasParentRef);
 		p5.background(255, 255, 255);
+		// p5.cursor(p5.CROSS);
 
 		drawing_layer = p5.createGraphics(canvasWidth, canvasHeight);
 		text_layer = p5.createGraphics(canvasWidth, canvasHeight);
+		mouse_layer = p5.createGraphics(canvasWidth, canvasHeight);
 		drawing_layer.strokeWeight(strokeSize);
 		drawing_layer.stroke(currentColour[0], currentColour[1], currentColour[2]);
 
@@ -113,7 +116,7 @@ function CanvasComponent(props) {
 				break;
 			case commands.SHRINK:
 				if (!mix) {
-					strokeSize = Math.max(strokeSize - strokeIncrement, 0);
+					strokeSize = Math.max(strokeSize - strokeIncrement, 1);
 				}
 				drawing_layer.strokeWeight(strokeSize);
 				break;
@@ -141,14 +144,14 @@ function CanvasComponent(props) {
 				if (mix) {
 					if (mixMore) {
 						currentColour[0] = Math.min(currentColour[0] + colorIncrement, 255);
-						props.setColourToMix(['red',true]);
+						props.setColourToMix(['red', true]);
 					} else {
 						if (mixLess) {
 							currentColour[0] = Math.max(currentColour[0] - colorIncrement, 0);
-							props.setColourToMix(['red',false]);
+							props.setColourToMix(['red', false]);
 						} else {
 							currentColour = [255, 0, 0];
-							props.setColourToMix(['red',null]);
+							props.setColourToMix(['red', null]);
 						}
 					}
 					console.log('COLOUR ' + currentColour);
@@ -164,20 +167,20 @@ function CanvasComponent(props) {
 				if (mix) {
 					if (mixMore) {
 						currentColour[1] = Math.min(currentColour[1] + colorIncrement, 255);
-						props.setColourToMix(['green',true]);
+						props.setColourToMix(['green', true]);
 					} else {
 						if (mixLess) {
 							currentColour[1] = Math.max(currentColour[1] - colorIncrement, 0);
-							props.setColourToMix(['green',false]);
+							props.setColourToMix(['green', false]);
 						} else {
 							currentColour = [0, 255, 0];
-							props.setColourToMix(['green',null]);
+							props.setColourToMix(['green', null]);
 						}
 					}
 					console.log('COLOUR ' + currentColour);
 					props.setCurrentColour(currentColour);
 					drawing_layer.stroke(currentColour[0], currentColour[1], currentColour[2]);
-					
+
 					mix = false;
 					paint = true;
 					mixMore = false;
@@ -188,14 +191,14 @@ function CanvasComponent(props) {
 				if (mix) {
 					if (mixMore) {
 						currentColour[2] = Math.min(currentColour[2] + colorIncrement, 255);
-						props.setColourToMix(['blue',true]);
+						props.setColourToMix(['blue', true]);
 					} else {
 						if (mixLess) {
 							currentColour[2] = Math.max(currentColour[2] - colorIncrement, 0);
-							props.setColourToMix(['blue',false]);
+							props.setColourToMix(['blue', false]);
 						} else {
 							currentColour = [0, 0, 255];
-							props.setColourToMix(['blue',null]);
+							props.setColourToMix(['blue', null]);
 						}
 					}
 					console.log('COLOUR ' + currentColour);
@@ -213,16 +216,16 @@ function CanvasComponent(props) {
 						currentColour[0] = Math.min(currentColour[0] - colorIncrement, 255);
 						currentColour[1] = Math.min(currentColour[1] - colorIncrement, 255);
 						currentColour[2] = Math.min(currentColour[2] - colorIncrement, 255);
-						props.setColourToMix(['black',true]);
+						props.setColourToMix(['black', true]);
 					} else {
 						if (mixLess) {
 							currentColour[0] = Math.max(currentColour[0] + colorIncrement, 0);
 							currentColour[1] = Math.max(currentColour[1] + colorIncrement, 0);
 							currentColour[2] = Math.max(currentColour[2] + colorIncrement, 0);
-							props.setColourToMix(['black',false]);
+							props.setColourToMix(['black', false]);
 						} else {
 							currentColour = [0, 0, 0];
-							props.setColourToMix(['black',null]);
+							props.setColourToMix(['black', null]);
 						}
 					}
 					console.log('COLOUR ' + currentColour);
@@ -240,16 +243,16 @@ function CanvasComponent(props) {
 						currentColour[0] = Math.max(currentColour[0] + colorIncrement, 0);
 						currentColour[1] = Math.max(currentColour[1] + colorIncrement, 0);
 						currentColour[2] = Math.max(currentColour[2] + colorIncrement, 0);
-						props.setColourToMix(['white',true]);
+						props.setColourToMix(['white', true]);
 					} else {
 						if (mixLess) {
 							currentColour[0] = Math.min(currentColour[0] - colorIncrement, 255);
 							currentColour[1] = Math.min(currentColour[1] - colorIncrement, 255);
 							currentColour[2] = Math.min(currentColour[2] - colorIncrement, 255);
-							props.setColourToMix(['white',false]);
+							props.setColourToMix(['white', false]);
 						} else {
 							currentColour = [255, 255, 255];
-							props.setColourToMix(['white',null]);
+							props.setColourToMix(['white', null]);
 						}
 					}
 					console.log('COLOUR ' + currentColour);
@@ -320,6 +323,7 @@ function CanvasComponent(props) {
 	const renderPainting = (p5, show_text = false) => {
 		p5.background(255, 255, 255)
 		p5.image(drawing_layer, 0, 0)
+		p5.image(mouse_layer, 0, 0)
 		if (show_text) p5.image(text_layer, 0, 0)
 	}
 
@@ -372,6 +376,10 @@ function CanvasComponent(props) {
 		if (currentPos.y < 0) currentPos.y = 0;
 		if (currentPos.y >= canvasWidth) currentPos.y = canvasHeight - 1;
 
+		mouse_layer.noFill();
+		mouse_layer.stroke(0);
+		mouse_layer.ellipse(currentPos.x, currentPos.y, strokeSize, strokeSize);
+
 		renderPainting(p5);
 	};
 
@@ -392,6 +400,8 @@ function CanvasComponent(props) {
 	}
 
 	const draw = (p5) => {
+		mouse_layer.clear();
+
 		drawing_layer.noFill();
 
 		if (commandQueue.length > 0) {
