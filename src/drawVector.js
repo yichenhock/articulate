@@ -16,13 +16,15 @@ function magnitude(vector) {
 
 function normalise(vector) {
     let mag = magnitude(vector);
+    if(mag==0) return vector
+    console.log("Normalized to " + vector.x / mag)
     return new Vector(vector.x / mag, vector.y / mag);
 }
 
 function midway(v1, v2) {
     let v1n = normalise(v1);
     let v2n = normalise(v2);
-    let v = new Vector((v1n.x + v2n.x) / 2, (v1n.y + v2n.y) / 2);
+    let v = new Vector(v1n.x + v2n.x, v1n.y + v2n.y);
     return normalise(v);
 }
 

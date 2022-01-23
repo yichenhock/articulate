@@ -1,3 +1,4 @@
+import { insertFindingOccurrence } from "./occurences";
 
 export const commands = {
     LEFT: 'left',
@@ -6,22 +7,33 @@ export const commands = {
     DOWN: 'down',
     RED: 'red',
     YELLOW: 'yellow',
-    BLUE: 'blue'
+    BLUE: 'blue',
+    REGIONS: 'regions',
+    FILL: 'fill'
 };
 
-const commandWords = new Map([
+// maps spoken words to commands
+const commandWordsWithHomophones = new Map([
   ['right', commands.RIGHT],
   ['write', commands.RIGHT],
   ['left', commands.LEFT],
   ['up', commands.UP],
+  ['upward', commands.UP],
+  ['upwards', commands.UP],
   ['down', commands.DOWN],
-  ['red', commands.RED],
-  ['yellow', commands.YELLOW],
-  ['blue', commands.BLUE],
+]);
+const commandWords = new Map([
+  ['right', commands.RIGHT],
+  ['left', commands.LEFT],
+  ['up', commands.UP],
+  ['upward', commands.UP],
+  ['down', commands.DOWN],
+  ['regions', commands.REGIONS],
+  ['fill', commands.FILL],
 ]);
 
 export function subscribeToVoiceCommands(onCommand) {
-  // more boilerplate to support safari
+  // TODO: more boilerplate to support safari
   navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
     if (!MediaRecorder.isTypeSupported('audio/webm')) return alert('Browser not supported');
     const mic = new MediaRecorder(stream, { mimeType: 'audio/webm' });
@@ -37,11 +49,10 @@ export function subscribeToVoiceCommands(onCommand) {
     const keywords = [...commandWords.keys()];
 
     const baseUrl = 'wss://api.deepgram.com/v1/listen';
-    const params = new URLSearchParams([
-    ['language', 'en-GB']
-    ] 
-    // + keywords.map((keyword) => ['keyword', keyword])
-    );
+    const paramsList = [
+        ['language', 'en-GB'],
+      ].concat(keywords.map((keyword) => ['search', keyword]));
+    const params = new URLSearchParams(paramsList);
 
     const url = baseUrl + '?' + params.toString();
     console.log(url);
@@ -49,7 +60,7 @@ export function subscribeToVoiceCommands(onCommand) {
     const socket = new WebSocket(url, ['token', process.env.REACT_APP_DEEPGRAM_API_KEY]);
 
     // 100 - 1000 sensible range
-    const sendInterval_ms = 250;
+    const sendInterval_ms = 100;
 
     const sendData = event => socket.send(event.data);
     socket.onopen = () => {
@@ -57,29 +68,37 @@ export function subscribeToVoiceCommands(onCommand) {
       mic.start(sendInterval_ms);
     };
 
+    // {command: occurrences}
+    let firedCommands = new Map();
+
     socket.onmessage = message => {
       const received = JSON.parse(message.data);
       const alt0 = received.channel.alternatives[0];
-      const transcript = alt0.transcript;
-      console.log(transcript);
-      const words = alt0.words.map((word) => word.word);
-      
-      for (const word of words) {
-          if (commandWords.has(word)) {
-            const command = commandWords.get(word)
-            // commands.push(command);
-            onCommand(command);
-            // check if finalised/overlap
-            // (use time)
-          }
-      }
+      const search = received.channel.search;
 
-      // let newCommandLog = commandLog.slice();
-      // for (const command of commands) {
-      //   // commandQueue.push(command);
-      //   newCommandLog.push(command);
-      // }
-      // setCommandLog(newCommandLog);
+      const transcript = alt0.transcript;
+      console.log(`tr: ${transcript}`);
+
+      if (!search) return;
+      for (const result of search) {
+        const word = result.query;
+        const command = commandWords.get(word);
+
+        if (!firedCommands.has(command)) {
+          firedCommands.set(command, []);
+        }
+        const commandOccurrences = firedCommands.get(command);
+        for (const hit of result.hits) {
+          if (hit.confidence < 0.8) continue;
+
+          const occurrence = { start: hit.start, end: hit.end };
+
+          const seen = insertFindingOccurrence(occurrence, commandOccurrences);
+          if (seen) continue;
+          console.log(`${word} @ ${hit.start} - ${hit.end} (${hit.snippet})`);
+          onCommand(command);
+        }
+      }
     };
 
     // TODO: return to caller!

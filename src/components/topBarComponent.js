@@ -5,27 +5,28 @@ function TopBarComponent(props){
         <header className="Navbar">
         <div className="Toolbar">
             <table className='toolbar-content'>
-            <tr>
-                <td>
-                    <div style={{marginLeft:'10px', width:'100px'}}>
-                        <img src={require('./img/articulate-logo-smol.png')} alt="Logo" className='logo'/>
-                    </div>
-                </td>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div style={{marginLeft:'10px', width:'100px'}}>
+                                <img src={require('./img/articulate-logo-smol.png')} alt="Logo" className='logo'/>
+                            </div>
+                        </td>
 
-                <td>
-                    <div className='cmd-area' style={props.cmdText=='' ? {color: 'grey'}:{color: 'white'}}>
-                        {props.cmdText=='' ? 'say something...':props.cmdText}
-                    </div>
-                </td>
+                        <td>
+                            <div className='cmd-area' style={props.cmdText ? {color: 'white'} : {color: 'grey'}}>
+                                {props.cmdText ? props.cmdText : 'say something...'}
+                            </div>
+                        </td>
 
-                <td>
-                    <div style={{textAlign:'right', color:'white'}}>
-                        
-                    </div>
-                </td>
-            </tr>
+                        <td>
+                            <div style={{textAlign:'right', color:'white'}}>
+                                
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
             </table>
-
         </div>
       </header>
     ); 
