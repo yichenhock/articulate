@@ -122,7 +122,7 @@ function arrayEquals(a, b) {
       
       queue = expandToNeighbours(p5, graphics, queue, current)  
     }
-    console.log("Found new region " + seed_index)
+    //console.log("Found new region " + seed_index)
     graphics.updatePixels()
     return [seed_index, region_size]
   }
