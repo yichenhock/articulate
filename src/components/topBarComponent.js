@@ -21,6 +21,9 @@ function TopBarComponent(props){
 
                         <td>
                             <div style={{textAlign:'right', color:'white'}}>
+                                <button className='help-button' onClick={()=>{props.setHelpDisplay(!props.helpDisplay)}}>
+                                    <img src={require('./img/help-icon.png')} alt='help-icon' className='help-icon'/>
+                                </button>
                                 
                             </div>
                         </td>

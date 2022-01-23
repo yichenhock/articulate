@@ -35,6 +35,52 @@
     height: 40px;
 }
 
+.help-button{ 
+    background-color: rgb(29, 29, 29);
+    border: none;
+}
+
+.help-icon{
+    height: 40px;
+}
+
+.help-overlay{
+    position: absolute;
+    height: 60vh; 
+    width:60vw; 
+    background-color: rgba(19, 19, 19,0.9);
+    border-radius: 25px;
+
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+}
+
+.help-title{
+    font-family: 'Comfortaa', cursive;
+    text-align: center;
+    width:100%;
+    margin-top: 40px;
+    color: white;
+    font-size: larger; 
+    font-weight: bold;
+}
+
+.help-table{ 
+    padding: 30px;
+    font-family: 'Comfortaa', cursive;
+    color: white; 
+    width: 100%;
+}
+
+.help-table td {
+    height:1.8em;
+    padding-left:1em;
+    padding-right:1em;
+}
+
 .cmd-area{
     height:40px;
     width:30vw;
@@ -67,6 +113,7 @@
     top: 50%;
     left:50%;
     transform: translate(-50%,-50%);
+    z-index: 0;
 }
 
 .colour-palette{
@@ -91,7 +138,7 @@
     top: 100%;
     left: 50%;
     transform: translate(-50%,-50%);
-    z-index: 1;
+    z-index: 9;
 }
 
 .small-circle{
