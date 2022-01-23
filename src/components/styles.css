@@ -68,3 +68,84 @@
     left:50%;
     transform: translate(-50%,-50%);
 }
+
+.colour-palette{
+    position: absolute; 
+    min-width: 100%;
+    min-height:100%;
+    pointer-events: none;
+    /* bottom:-80px;
+    left: 50%;
+    transform: translate(-50%, -0); */
+}
+
+#grow-circle{
+    position:fixed;
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    background-color:rgb(29, 29, 29);
+    box-shadow: 0px 0px 5px black;
+    transition: all 1s ease-out;
+
+    top: 100%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    z-index: 1;
+}
+
+.small-circle{
+    position: fixed; 
+    width: 50px;
+    height: 50px; 
+    border-radius: 50%; 
+    transition: all 1s ease-out;
+    z-index: 10;
+}
+
+.black{ 
+    background-color: rgb(0,0,0);
+    top: 40%;
+    left: 13%;
+    transform: translate(-13%,-40%);
+    opacity: 0%;
+}
+
+.red{ 
+    background-color: rgb(255,0,0);
+    top: 20%;
+    left: 25%;
+    transform: translate(-25%,-20%);
+    opacity: 0%;
+}
+
+.green{ 
+    background-color: rgb(0,255,0);
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%,-10%);
+    opacity: 0%;
+}
+
+.blue{ 
+    background-color: rgb(0,0,255);
+    top: 20%;
+    left: 75%;
+    transform: translate(-75%,-20%);
+    opacity: 0%;
+}
+
+.white{ 
+    background-color: rgb(255,255,255);
+    top: 40%;
+    left: 87%;
+    transform: translate(-87%,-40%);
+    opacity: 0%;
+}
+
+#mixing-circle{
+    background-color: thistle;
+    top: 98%;
+    left: 50%;
+    transform: translate(-50%,-98%);
+}
