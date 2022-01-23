@@ -250,6 +250,7 @@ function CanvasComponent(props) {
 				justSaved = true;
 				break;
 			case commands.REGIONS:
+				going = false;
 				identifyAllRegions(p5);
 				break;
 			case commands.FILL:
@@ -302,8 +303,7 @@ function CanvasComponent(props) {
 	}
 
 	const fillAtPen = (p5) => {
-
-		floodFill(p5, p5.createVector(Math.round(currentPos.x * p5.pixelDensity()), Math.round(currentPos.y * p5.pixelDensity())), [255, 0, 0, 255], drawing_layer)
+		floodFill(p5, p5.createVector(Math.round(currentPos.x * p5.pixelDensity()), Math.round(currentPos.y * p5.pixelDensity())), currentColour.concat(255), drawing_layer)
 		console.log("Flooded")
 		renderPainting(p5);
 	};
