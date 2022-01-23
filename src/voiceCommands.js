@@ -78,6 +78,10 @@ const commandWords = new Map([
   ['five', commands.FIVE],
   ['six', commands.SIX],
   ['seven', commands.SEVEN],
+
+  ['help', commands.HELP],
+
+  ['close', commands.CLOSE],
 ]);
 
 const words1 = [
@@ -92,6 +96,8 @@ const words1 = [
   ['move', commands.MOVE],
   ['quick', commands.QUICK],
   ['slow', commands.SLOW],
+  ['help'],
+  ['close']
 ];
 
 const words2 = [
@@ -199,8 +205,8 @@ export function subscribeToVoiceCommands(onCommand) {
 
     let open1 = false;
     let open2 = false;
-    const socket1 = listenForKeywords(words1, process.env.REACT_APP_DEEPGRAM_API_KEY, 1)
-    const socket2 = listenForKeywords(words2, process.env.REACT_APP_DEEPGRAM_API_KEY_2, 2)
+    const socket1 = listenForKeywords([...words1.map(arr => arr[0])], process.env.REACT_APP_DEEPGRAM_API_KEY, 1)
+    const socket2 = listenForKeywords([...words2.map(arr => arr[0])], process.env.REACT_APP_DEEPGRAM_API_KEY_2, 2)
 
     const sendData = event => {
       socket1.send(event.data)

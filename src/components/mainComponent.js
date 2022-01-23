@@ -43,7 +43,7 @@ function MainComponent() {
         <div className='canvas-area'>
         <CommandContext.Consumer>
           {({ setCommand, setCurrentColour, setColourToMix }) => (
-            <CanvasComponent setCommand={setCommand} setCurrentColour={setCurrentColour} setColourToMix={setColourToMix}/>
+            <CanvasComponent setCommand={setCommand} setCurrentColour={setCurrentColour} setColourToMix={setColourToMix} setHelpDisplay={setHelpDisplay}/>
           )}
         </CommandContext.Consumer>
         </div>

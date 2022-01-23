@@ -286,6 +286,12 @@ function CanvasComponent(props) {
 			case commands.THREE:
 				jumpPenToRegion(p5, command);
 				break;
+			case commands.HELP:
+				props.setHelpDisplay(true);
+				break;
+			case commands.CLOSE:
+				props.setHelpDisplay(false);
+				break;
 			default:
 				console.log("unhandled " + command);
 		}
