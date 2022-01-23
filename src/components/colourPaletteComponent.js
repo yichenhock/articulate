@@ -4,18 +4,6 @@ import './colourMixer.css'
 
 function ColourPalette(props) { // props: mixing (bool), colourToMix: 'black, etc', currentColour
 
-    // const colours = {
-    //     'black': [0,0,0],
-    //     'red': [255,0,0],
-    //     'green': [0,255,0], 
-    //     'blue': [0,0,255], 
-    //     'white': [255,255,255]
-    // }
-
-    function calculateColour(colour){
-        return colour;
-    }
-
     function Ball(size, colour) {
         this.elem = document.createElement('div');
         this.size = size;
@@ -23,8 +11,9 @@ function ColourPalette(props) { // props: mixing (bool), colourToMix: 'black, et
         this.elem.style.height = size + 'px';
         this.elem.style.borderRadius = (size * 0.5) + 'px';
         this.elem.style.position = 'absolute';
-        this.elem.style.zIndex = '100';
+        this.elem.style.zIndex = '9';
         this.elem.style.backgroundColor = colour;
+        this.elem.style.opacity = '95%';
 
         this.elem.style['-webkit-transition-property'] = 'background-color, top, left, -webkit-transform';
         this.elem.style['-webkit-transition-duration'] = '.2s';
@@ -34,19 +23,17 @@ function ColourPalette(props) { // props: mixing (bool), colourToMix: 'black, et
         this.x = circle_to_mix.x + 25;
         this.y = circle_to_mix.y + 25;
 
-        this.bounceSteps = [2.5, 0.1, 2.4, 0.15, 1.4, 0.6, 1.3, 0.7, 1.2, 0.8, 1.05, 0.95, 1.0];
+        this.bounceSteps = [2.5, 0.1, 2.4, 0.15, 1.4, 0.6, 1.3, 0.7, 1.2, 0.8, 1.05, 0.95];
 
         this.render();
         document.body.appendChild( this.elem );
-        this.bounce([1.4, 0.6, 1.3, 0.7, 1.2, 0.8, 1.05, 0.95, 1.0]);
+        this.bounce([1.4, 0.6, 1.3, 0.7, 1.2, 0.8, 1.05, 0.95]);
         
         // move the thing over to the mixer thingy
         var mixing_circle = document.getElementById('mixing-circle').getBoundingClientRect();
-        
+
         this.elem.style.left = (mixing_circle.x + 25 - this.size * 0.5) + 'px';
         this.elem.style.top  = (mixing_circle.y + 25 - this.size * 0.5) + 'px';
-        
-
     }
 
     Ball.prototype.render = function() {
@@ -62,71 +49,109 @@ function ColourPalette(props) { // props: mixing (bool), colourToMix: 'black, et
         }.bind(this, i), 70*i);
         }
     };
- 
-    // useEffect(()=>{
-    // },[]);
 
-    useEffect(()=>{
+    function shrinkPalette(){
         var c = ['black', 'red', 'green', 'blue', 'white']
         var grow_circle = document.getElementById('grow-circle');
-
         var coloured_circles = []
         for (var i=0;i<c.length;i++){
             coloured_circles.push(document.getElementById(c[i]))
         }
 
-        if(props.mixing){
-            // increase the size of the palette
-            grow_circle.style.height = `${400}px`;
-            grow_circle.style.width = `${400}px`;
-            grow_circle.style.backgroundColor = 'rgb(43, 43, 43)';
-            for (var i=0;i<c.length;i++){
-                coloured_circles[i].style.opacity = '100%';
-                coloured_circles[i].style.height = '50px';
-                coloured_circles[i].style.width = '50px';
-            }
+        // decrease the size of the palette
+        grow_circle.style.height = `${160}px`;
+        grow_circle.style.width = `${160}px`;
+        grow_circle.style.backgroundColor = 'rgb(29, 29, 29)';
+        for (var i=0;i<c.length;i++){
+            coloured_circles[i].style.opacity = '0%';
+            coloured_circles[i].style.height = '0px';
+            coloured_circles[i].style.width = '0px';
+        }
+    }
+ 
+    function growPalette(){
+        var c = ['black', 'red', 'green', 'blue', 'white']
+        var grow_circle = document.getElementById('grow-circle');
+        var coloured_circles = []
+        for (var i=0;i<c.length;i++){
+            coloured_circles.push(document.getElementById(c[i]))
+        }
+        // increase the size of the palette
+        grow_circle.style.height = `${400}px`;
+        grow_circle.style.width = `${400}px`;
+        grow_circle.style.backgroundColor = 'rgb(43, 43, 43)';
+        for (var i=0;i<c.length;i++){
+            coloured_circles[i].style.opacity = '100%';
+            coloured_circles[i].style.height = '50px';
+            coloured_circles[i].style.width = '50px';
+        }
+    };
 
-        } else {
-            // decrease the size of the palette
-            grow_circle.style.height = `${160}px`;
-            grow_circle.style.width = `${160}px`;
-            grow_circle.style.backgroundColor = 'rgb(29, 29, 29)';
-            for (var i=0;i<c.length;i++){
-                coloured_circles[i].style.opacity = '0%';
-                coloured_circles[i].style.height = '0px';
-                coloured_circles[i].style.width = '0px';
-            }
-        };
-
-    },[props.mixing]);
-    
     useEffect(()=>{
-        console.log(props.colourToMix);
-        if(props.mixing && props.colourToMix){
+        if (props.command=='mix'){
+            growPalette();
+        }
+    }, [props.command])
+
+    useEffect(()=>{
+        console.log(props.colourToMix); // e.g. d['red', true]
+        // let timer = null; 
+        // let ball;
+
+        if (props.colourToMix[1]==true){ // more
             // do the mixing! 
             // create a ball at the location of the current colour and move it and remove it
-            const ball = new Ball(50, props.colourToMix)
+            const ball = new Ball(50, props.colourToMix[0])
+
             let timer = setTimeout(()=>{
                 ball.elem.parentElement.removeChild(ball.elem); 
-            },1500)
-
+                shrinkPalette();
+            },2500)
+            
             return()=>{
                 clearTimeout(timer);
             }
+
+        } else if (props.colourToMix[1]==false){ // or less
+
+            // pulsate out the colour? 
+            // var mixing_circle = document.getElementById('mixing-circle');
+            // mixing_circle.style.strokeWidth = '5em';
+            // mixing_circle.style.stroke = props.colourToMix[0];
+
+            // let timer = setTimeout(()=>{
+            //     shrinkPalette();
+            // },2500)
+            
+            // return()=>{
+            //     clearTimeout(timer);
+            // }
+
+            // too tired to code this :///
+
+            shrinkPalette(); 
+
+        } else{ // or just change colour
+            shrinkPalette();
         }
+        
     },[props.colourToMix]);
 
     useEffect(()=>{ // props.currentColour = [r,g,b]
+        console.log('current colour: ', props.currentColour);
         var mixing_circle = document.getElementById('mixing-circle');
         let r = props.currentColour[0]
         let g = props.currentColour[1]
         let b = props.currentColour[2]
         mixing_circle.style.backgroundColor = `rgb(${r},${g},${b})`
-    }, [props.currentColour])
+    }, [props.currentColour, props.colourToMix])
 
     return (
     <div  className='colour-palette'>
         <div className='small-circle' id='mixing-circle'/>
+
+        {/* <div className='pulse-circle' id='pulse-circle'/> */}
+
         <div id='grow-circle'>
             {/* black, red, green, blue, white */}
             <div className='small-circle black' id='black'></div>
@@ -138,6 +163,5 @@ function ColourPalette(props) { // props: mixing (bool), colourToMix: 'black, et
     </div>
     );
   }
-
 
 export default ColourPalette; 

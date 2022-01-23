@@ -38,7 +38,7 @@ const commandWords = new Map([
   ['up', commands.UP],
   ['down', commands.DOWN],
   ['red', commands.RED],
-  ['yellow', commands.YELLOW],
+  ['green', commands.GREEN],
   ['blue', commands.BLUE],
   ['go', commands.GO],
   ['stop', commands.STOP],

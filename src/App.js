@@ -4,8 +4,11 @@ import MainComponent from './components/mainComponent.js'
 
 function App() {
   const [command, setCommand] = useState(null);
+  const [currColour, setCurrentColour] = useState([0,0,0]); 
+  const [colourToMix, setColourToMix] = useState(['black',null]); // null, true (more), false (less)
+
   return (
-    <CommandContext.Provider value={{command, setCommand}}>
+    <CommandContext.Provider value={{command, setCommand, currColour, setCurrentColour, colourToMix, setColourToMix}}>
       <MainComponent/>
     </CommandContext.Provider>
   );

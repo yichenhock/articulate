@@ -55,10 +55,6 @@ function HelpOverlay(props){
                         <td>MOVE</td>
                         <td>Move the brush off the canvas</td>
                     </tr>
-                    <tr>
-                        <td>HELP</td>
-                        <td>View speech commands</td>
-                    </tr>
                     </table>
                     </td>
                     <td>
@@ -106,10 +102,6 @@ function HelpOverlay(props){
                     <tr>
                         <td>SAVE</td>
                         <td>Save your painting</td>
-                    </tr>
-                    <tr>
-                        <td>CLOSE</td>
-                        <td>Close help window</td>
                     </tr>
                     </table>
                     </td>

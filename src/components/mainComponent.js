@@ -10,7 +10,6 @@ import { CommandContext } from './commandContext';
 function MainComponent() {
 
   const [mixing, setMixing] = useState(false); 
-  
   const [helpDisplay, setHelpDisplay] = useState(false); 
 
   return (
@@ -28,15 +27,23 @@ function MainComponent() {
       </div>
       
       <div>
-          <ColourPalette mixing={mixing} colourToMix={'white'} currentColour={[60,58,100]}/>
-        </div>
+        <CommandContext.Consumer>
+          {({ command, currColour, colourToMix }) => (
+            <ColourPalette colourToMix={colourToMix} currentColour={currColour} command={command}/>
+          )}
+        </CommandContext.Consumer>
+
+          
+      </div>
+
+
       <GridLines className="grid-area" cellWidth={120} lineColor={'rgb(60, 60, 60)'} strokeWidth={1} cellWidth2={24} lineColor2={'rgb(60, 60, 60)'}>
         
         
         <div className='canvas-area'>
         <CommandContext.Consumer>
-          {({ setCommand }) => (
-            <CanvasComponent setCommand={setCommand}/>
+          {({ setCommand, setCurrentColour, setColourToMix }) => (
+            <CanvasComponent setCommand={setCommand} setCurrentColour={setCurrentColour} setColourToMix={setColourToMix}/>
           )}
         </CommandContext.Consumer>
         </div>

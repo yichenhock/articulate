@@ -26,7 +26,7 @@ let mixMore = false;
 let mixLess = false;
 let colorIncrement = 51;
 
-let currentColour = [0, 255, 0];
+let currentColour = [0, 0, 0];
 
 let justSaved = false;
 
@@ -141,14 +141,18 @@ function CanvasComponent(props) {
 				if (mix) {
 					if (mixMore) {
 						currentColour[0] = Math.min(currentColour[0] + colorIncrement, 255);
+						props.setColourToMix(['red',true]);
 					} else {
 						if (mixLess) {
 							currentColour[0] = Math.max(currentColour[0] - colorIncrement, 0);
+							props.setColourToMix(['red',false]);
 						} else {
 							currentColour = [255, 0, 0];
+							props.setColourToMix(['red',null]);
 						}
 					}
 					console.log('COLOUR ' + currentColour);
+					props.setCurrentColour(currentColour);
 					drawing_layer.stroke(currentColour[0], currentColour[1], currentColour[2]);
 					mix = false;
 					paint = true;
@@ -160,15 +164,20 @@ function CanvasComponent(props) {
 				if (mix) {
 					if (mixMore) {
 						currentColour[1] = Math.min(currentColour[1] + colorIncrement, 255);
+						props.setColourToMix(['green',true]);
 					} else {
 						if (mixLess) {
 							currentColour[1] = Math.max(currentColour[1] - colorIncrement, 0);
+							props.setColourToMix(['green',false]);
 						} else {
 							currentColour = [0, 255, 0];
+							props.setColourToMix(['green',null]);
 						}
 					}
 					console.log('COLOUR ' + currentColour);
+					props.setCurrentColour(currentColour);
 					drawing_layer.stroke(currentColour[0], currentColour[1], currentColour[2]);
+					
 					mix = false;
 					paint = true;
 					mixMore = false;
@@ -179,14 +188,18 @@ function CanvasComponent(props) {
 				if (mix) {
 					if (mixMore) {
 						currentColour[2] = Math.min(currentColour[2] + colorIncrement, 255);
+						props.setColourToMix(['blue',true]);
 					} else {
 						if (mixLess) {
 							currentColour[2] = Math.max(currentColour[2] - colorIncrement, 0);
+							props.setColourToMix(['blue',false]);
 						} else {
 							currentColour = [0, 0, 255];
+							props.setColourToMix(['blue',null]);
 						}
 					}
 					console.log('COLOUR ' + currentColour);
+					props.setCurrentColour(currentColour);
 					drawing_layer.stroke(currentColour[0], currentColour[1], currentColour[2]);
 					mix = false;
 					paint = true;
@@ -200,16 +213,20 @@ function CanvasComponent(props) {
 						currentColour[0] = Math.min(currentColour[0] - colorIncrement, 255);
 						currentColour[1] = Math.min(currentColour[1] - colorIncrement, 255);
 						currentColour[2] = Math.min(currentColour[2] - colorIncrement, 255);
+						props.setColourToMix(['black',true]);
 					} else {
 						if (mixLess) {
 							currentColour[0] = Math.max(currentColour[0] + colorIncrement, 0);
 							currentColour[1] = Math.max(currentColour[1] + colorIncrement, 0);
 							currentColour[2] = Math.max(currentColour[2] + colorIncrement, 0);
+							props.setColourToMix(['black',false]);
 						} else {
 							currentColour = [0, 0, 0];
+							props.setColourToMix(['black',null]);
 						}
 					}
 					console.log('COLOUR ' + currentColour);
+					props.setCurrentColour(currentColour);
 					drawing_layer.stroke(currentColour[0], currentColour[1], currentColour[2]);
 					mix = false;
 					paint = true;
@@ -223,16 +240,20 @@ function CanvasComponent(props) {
 						currentColour[0] = Math.max(currentColour[0] + colorIncrement, 0);
 						currentColour[1] = Math.max(currentColour[1] + colorIncrement, 0);
 						currentColour[2] = Math.max(currentColour[2] + colorIncrement, 0);
+						props.setColourToMix(['white',true]);
 					} else {
 						if (mixLess) {
 							currentColour[0] = Math.min(currentColour[0] - colorIncrement, 255);
 							currentColour[1] = Math.min(currentColour[1] - colorIncrement, 255);
 							currentColour[2] = Math.min(currentColour[2] - colorIncrement, 255);
+							props.setColourToMix(['white',false]);
 						} else {
 							currentColour = [255, 255, 255];
+							props.setColourToMix(['white',null]);
 						}
 					}
 					console.log('COLOUR ' + currentColour);
+					props.setCurrentColour(currentColour);
 					drawing_layer.stroke(currentColour[0], currentColour[1], currentColour[2]);
 					mix = false;
 					paint = true;
