@@ -7,7 +7,8 @@ export const commands = {
     RED: 'red',
     YELLOW: 'yellow',
     BLUE: 'blue',
-    REGIONS: 'regions'
+    REGIONS: 'regions',
+    FILL: 'fill'
 };
 
 const commandWords = new Map([
@@ -20,6 +21,7 @@ const commandWords = new Map([
   ['yellow', commands.YELLOW],
   ['blue', commands.BLUE],
   ['regions', commands.REGIONS],
+  ['fill', commands.FILL],
 ]);
 
 export function subscribeToVoiceCommands(onCommand) {
