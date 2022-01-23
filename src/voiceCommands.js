@@ -6,7 +6,8 @@ export const commands = {
     DOWN: 'down',
     RED: 'red',
     YELLOW: 'yellow',
-    BLUE: 'blue'
+    BLUE: 'blue',
+    REGIONS: 'regions'
 };
 
 const commandWords = new Map([
@@ -18,6 +19,7 @@ const commandWords = new Map([
   ['red', commands.RED],
   ['yellow', commands.YELLOW],
   ['blue', commands.BLUE],
+  ['regions', commands.REGIONS],
 ]);
 
 export function subscribeToVoiceCommands(onCommand) {
@@ -49,7 +51,7 @@ export function subscribeToVoiceCommands(onCommand) {
     const socket = new WebSocket(url, ['token', process.env.REACT_APP_DEEPGRAM_API_KEY]);
 
     // 100 - 1000 sensible range
-    const sendInterval_ms = 250;
+    const sendInterval_ms = 100;
 
     const sendData = event => socket.send(event.data);
     socket.onopen = () => {
