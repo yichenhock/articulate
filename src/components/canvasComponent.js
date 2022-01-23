@@ -64,6 +64,11 @@ function CanvasComponent(props) {
 		drawing_layer.strokeWeight(strokeSize);
 		drawing_layer.stroke(currentColour[0], currentColour[1], currentColour[2]);
 
+		mouse_layer.noFill();
+		mouse_layer.stroke(0);
+		mouse_layer.ellipse(currentPos.x, currentPos.y, strokeSize, strokeSize);
+
+		p5.image(mouse_layer, 0, 0);
 
 		subscribeToVoiceCommands((command) => {
 			commandQueue.push(command);
@@ -404,11 +409,11 @@ function CanvasComponent(props) {
 	}
 
 	const draw = (p5) => {
-		mouse_layer.clear();
 
 		drawing_layer.noFill();
 
 		if (commandQueue.length > 0) {
+			mouse_layer.clear();
 			while (commandQueue.length > 0) {
 				const command = commandQueue.shift();
 				props.setCommand(command);
@@ -421,6 +426,7 @@ function CanvasComponent(props) {
 			}
 		} else {
 			if (going) {
+				mouse_layer.clear();
 				movePen(p5);
 			}
 		}
