@@ -357,6 +357,10 @@ function CanvasComponent(props) {
 		if (currentPos.y < 0) currentPos.y = 0;
 		if (currentPos.y >= canvasWidth) currentPos.y = canvasHeight - 1;
 
+		mouse_layer.noFill();
+		mouse_layer.stroke(0);
+		mouse_layer.ellipse(currentPos.x, currentPos.y, strokeSize, strokeSize);
+
 		renderPainting(p5, false);
 	}
 
@@ -420,6 +424,7 @@ function CanvasComponent(props) {
 				movePen(p5);
 			}
 		}
+
 
 		//console.log(JSON.stringify(currentPos));
 	};

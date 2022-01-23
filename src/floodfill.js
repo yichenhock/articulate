@@ -19,10 +19,12 @@ function arrayEquals(a, b) {
     return queue
   }
   
+  var index_visited = {};
   export function floodFill(p5, seed, fillColor, graphics) {
     graphics.loadPixels();
 
-    console.log("Flooding at " + seed.x + ", " + seed.y)
+    index_visited = {};
+
   
     let index = 4 * (graphics.width * p5.pixelDensity() * seed.y + seed.x);
     let seedColor = [
@@ -32,19 +34,27 @@ function arrayEquals(a, b) {
       graphics.pixels[index + 3],
     ];
   
+    console.log("Flooding at " + seed.x + ", " + seed.y + ", seed colour " + seedColor);
+
     let queue = [];
     queue.push(seed);
     while (queue.length) {
       let current = queue.shift();
 
       let index = 4 * (graphics.width * p5.pixelDensity() * current.y + current.x);
+
+      // Skip if this already has a REGION
+      if (index in index_visited) {
+        continue;
+      }
+
       let color = [
         graphics.pixels[index],
         graphics.pixels[index + 1],
         graphics.pixels[index + 2],
         graphics.pixels[index + 3],
       ];
-      //console.log("Current x: " + current.x + ", current y: " + current.y)
+      //console.log("Current x: " + current.x + ", current y: " + current.y + ", queue size " + queue.length)
       //console.log("Getting from " + (index) + ", colour " + graphics.pixels[index])
   
       // Skip if this isn't a match
@@ -53,8 +63,9 @@ function arrayEquals(a, b) {
       }
   
       //console.log("Setting " + (index) + " to " + fillColor[0])
+      index_visited[index] = true;
       for (let i = 0; i < 4; i++) {
-          
+        
         graphics.pixels[index+i] = fillColor[i];
       }
       
