@@ -28,7 +28,12 @@ export const commands = {
   ZERO: 'zero',
   ONE: 'one',
   TWO: 'two',
-  THREE: 'three'
+  THREE: 'three',
+  FOUR: 'four',
+  FIVE: 'five',
+  SIX: 'six',
+  HELP: 'help',
+  CLOSE: 'close'
 };
 
 
@@ -36,6 +41,7 @@ const commandWords = new Map([
   ['right', commands.RIGHT],
   ['left', commands.LEFT],
   ['up', commands.UP],
+  ['upwards', commands.UP],
   ['down', commands.DOWN],
   ['red', commands.RED],
   ['green', commands.GREEN],
@@ -58,17 +64,28 @@ const commandWords = new Map([
   ['regions', commands.REGIONS],
   ['fill', commands.FILL],
   ['flood', commands.FILL],
-  //['zero', commands.ZERO],
-  //['one', commands.ONE],
-  //['two', commands.TWO],
-  //['three', commands.THREE],
+  ['zero', commands.ZERO],
+  ['one', commands.ONE],
+  ['two', commands.TWO],
+  ['three', commands.THREE],
+  ['four', commands.FOUR],
+  ['five', commands.FIVE],
+  ['six', commands.SIX],
+  ['seven', commands.SEVEN],
 ]);
+
 
 export function subscribeToVoiceCommands(onCommand) {
   // TODO: more boilerplate to support safari
   navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
     if (!MediaRecorder.isTypeSupported('audio/webm')) return alert('Browser not supported');
     const mic = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+
+    // 100 - 1000 sensible range
+    const sendInterval_ms = 100;
+
+    // {command: occurrences}
+    let firedCommands = new Map();
 
     // TODO: allow choosing language
     // utterances?
@@ -78,58 +95,79 @@ export function subscribeToVoiceCommands(onCommand) {
     // don't provide interim results?
     // punctuate?
 
-    const keywords = [...commandWords.keys()];
+    const listenForKeywords = (keywords, apiKey, i) => {
+      const baseUrl = 'wss://api.deepgram.com/v1/listen';
+      const paramsList = [
+        ['language', 'en-GB'],
+      ].concat(keywords.map((keyword) => ['search', keyword]));
+      const params = new URLSearchParams(paramsList);
 
-    const baseUrl = 'wss://api.deepgram.com/v1/listen';
-    const paramsList = [
-      ['language', 'en-GB'],
-    ].concat(keywords.map((keyword) => ['search', keyword]));
-    const params = new URLSearchParams(paramsList);
+      const url = baseUrl + '?' + params.toString();
+      console.log(`${i}: ${url}`);
 
-    const url = baseUrl + '?' + params.toString();
-    console.log(url);
+      const socket = new WebSocket(url, ['token', apiKey]);
 
-    const socket = new WebSocket(url, ['token', process.env.REACT_APP_DEEPGRAM_API_KEY]);
+      socket.onmessage = message => {
+        const received = JSON.parse(message.data);
+        const alt0 = received.channel.alternatives[0];
+        const search = received.channel.search;
 
-    // 100 - 1000 sensible range
-    const sendInterval_ms = 100;
+        const transcript = alt0.transcript;
+        console.log(`tr${i}: ${transcript}`);
 
-    const sendData = event => socket.send(event.data);
-    socket.onopen = () => {
-      mic.addEventListener('dataavailable', sendData);
-      mic.start(sendInterval_ms);
+        if (!search) return;
+        for (const result of search) {
+          const word = result.query;
+          const command = commandWords.get(word);
+
+          if (!firedCommands.has(command)) {
+            firedCommands.set(command, []);
+          }
+          const commandOccurrences = firedCommands.get(command);
+          for (const hit of result.hits) {
+            if (hit.confidence < 0.8) continue;
+
+            const occurrence = { start: hit.start, end: hit.end };
+
+            const seen = insertFindingOccurrence(occurrence, commandOccurrences);
+            if (seen) continue;
+            console.log(`${i}: ${word} @ ${hit.start} - ${hit.end} (${hit.snippet})`);
+            onCommand(command);
+          }
+        }
+      };
+
+      return socket;
+
     };
 
-    // {command: occurrences}
-    let firedCommands = new Map();
+    const keywords = [...commandWords.keys()];
+    let socketKeywords = [[], []];
+    for (let i = 0; i < keywords.length; i++) {
+      socketKeywords[i % 2].push(keywords[i]);
+    }
 
-    socket.onmessage = message => {
-      const received = JSON.parse(message.data);
-      const alt0 = received.channel.alternatives[0];
-      const search = received.channel.search;
+    let open1 = false;
+    let open2 = false;
+    const socket1 = listenForKeywords(socketKeywords[0], process.env.REACT_APP_DEEPGRAM_API_KEY, 1)
+    const socket2 = listenForKeywords(socketKeywords[1], process.env.REACT_APP_DEEPGRAM_API_KEY_2, 2)
 
-      const transcript = alt0.transcript;
-      console.log(`tr: ${transcript}`);
-
-      if (!search) return;
-      for (const result of search) {
-        const word = result.query;
-        const command = commandWords.get(word);
-
-        if (!firedCommands.has(command)) {
-          firedCommands.set(command, []);
-        }
-        const commandOccurrences = firedCommands.get(command);
-        for (const hit of result.hits) {
-          if (hit.confidence < 0.8) continue;
-
-          const occurrence = { start: hit.start, end: hit.end };
-
-          const seen = insertFindingOccurrence(occurrence, commandOccurrences);
-          if (seen) continue;
-          console.log(`${word} @ ${hit.start} - ${hit.end} (${hit.snippet})`);
-          onCommand(command);
-        }
+    const sendData = event => {
+      socket1.send(event.data)
+      socket2.send(event.data)
+    };
+    socket1.onopen = () => {
+      open1 = true;
+      if (open2) {
+        mic.addEventListener('dataavailable', sendData);
+        mic.start(sendInterval_ms);
+      }
+    };
+    socket2.onopen = () => {
+      open2 = true;
+      if (open1) {
+        mic.addEventListener('dataavailable', sendData);
+        mic.start(sendInterval_ms);
       }
     };
 
