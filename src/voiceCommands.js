@@ -10,7 +10,7 @@ export const commands = {
 };
 
 // maps spoken words to commands
-const commandWords = new Map([
+const commandWordsWithHomophones = new Map([
   ['right', commands.RIGHT],
   ['write', commands.RIGHT],
   ['left', commands.LEFT],
@@ -18,9 +18,13 @@ const commandWords = new Map([
   ['upward', commands.UP],
   ['upwards', commands.UP],
   ['down', commands.DOWN],
-  ['red', commands.RED],
-  ['yellow', commands.YELLOW],
-  ['blue', commands.BLUE],
+]);
+const commandWords = new Map([
+  ['right', commands.RIGHT],
+  ['left', commands.LEFT],
+  ['up', commands.UP],
+  ['upward', commands.UP],
+  ['down', commands.DOWN],
 ]);
 
 export function subscribeToVoiceCommands(onCommand) {
@@ -40,10 +44,10 @@ export function subscribeToVoiceCommands(onCommand) {
     const keywords = [...commandWords.keys()];
 
     const baseUrl = 'wss://api.deepgram.com/v1/listen';
-    const params = new URLSearchParams([
-        ['language', 'en-GB']
-      ] // + keywords.map((keyword) => ['search', keyword])
-    );
+    const paramsList = [
+        ['language', 'en-GB'],
+      ].concat(keywords.map((keyword) => ['search', keyword]));
+    const params = new URLSearchParams(paramsList);
 
     const url = baseUrl + '?' + params.toString();
     console.log(url);
@@ -59,29 +63,28 @@ export function subscribeToVoiceCommands(onCommand) {
       mic.start(sendInterval_ms);
     };
 
+    // {command: [{start, end}]}, array of recognitions, ordered by start, kept as non overlapping
+    let firedCommands = new Map();
+
     socket.onmessage = message => {
       const received = JSON.parse(message.data);
       const alt0 = received.channel.alternatives[0];
+      const search = received.channel.search;
+
       const transcript = alt0.transcript;
       console.log(transcript);
-      const words = alt0.words.map((word) => word.word);
-      
-      for (const word of words) {
-          if (commandWords.has(word)) {
-            const command = commandWords.get(word)
-            // commands.push(command);
-            onCommand(command);
-            // check if finalised/overlap
-            // (use time)
-          }
-      }
 
-      // let newCommandLog = commandLog.slice();
-      // for (const command of commands) {
-      //   // commandQueue.push(command);
-      //   newCommandLog.push(command);
-      // }
-      // setCommandLog(newCommandLog);
+      console.log(JSON.stringify(search));
+      if (!search) return;
+      for (const result of search) {
+        const word = result.query;
+        const command = commandWords.get(word);
+        for (const hit of result.hits) {
+          if (hit.confidence < 0.8) continue;
+          console.log(`${word} @ ${hit.start} - ${hit.end} (${hit.snippet})`);
+          onCommand(command);
+        }
+      }
     };
 
     // TODO: return to caller!
