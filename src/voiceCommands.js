@@ -1,3 +1,4 @@
+import { insertFindingOccurrence } from "./occurences";
 
 export const commands = {
     LEFT: 'left',
@@ -63,7 +64,7 @@ export function subscribeToVoiceCommands(onCommand) {
       mic.start(sendInterval_ms);
     };
 
-    // {command: [{start, end}]}, array of recognitions, ordered by start, kept as non overlapping
+    // {command: occurrences}
     let firedCommands = new Map();
 
     socket.onmessage = message => {
@@ -72,15 +73,24 @@ export function subscribeToVoiceCommands(onCommand) {
       const search = received.channel.search;
 
       const transcript = alt0.transcript;
-      console.log(transcript);
+      console.log(`tr: ${transcript}`);
 
-      console.log(JSON.stringify(search));
       if (!search) return;
       for (const result of search) {
         const word = result.query;
         const command = commandWords.get(word);
+
+        if (!firedCommands.has(command)) {
+          firedCommands.set(command, []);
+        }
+        const commandOccurrences = firedCommands.get(command);
         for (const hit of result.hits) {
           if (hit.confidence < 0.8) continue;
+
+          const occurrence = { start: hit.start, end: hit.end };
+
+          const seen = insertFindingOccurrence(occurrence, commandOccurrences);
+          if (seen) continue;
           console.log(`${word} @ ${hit.start} - ${hit.end} (${hit.snippet})`);
           onCommand(command);
         }
