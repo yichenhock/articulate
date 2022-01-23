@@ -406,6 +406,21 @@ function CanvasComponent(props) {
 		else if (p5.key == '1') commandQueue.push("one");
 		else if (p5.key == '2') commandQueue.push("two");
 		else if (p5.key == '3') commandQueue.push("three");
+		else if (p5.key == 'i') {
+			// Example directly sending a text string:
+			const deepai = require('deepai'); // OR include deepai.min.js as a script tag in your HTML
+
+			deepai.setApiKey('quickstart-QUdJIGlzIGNvbWluZy4uLi4K');
+
+			console.log("Posting to deepai...");
+			
+			(async function() {
+				var resp = await deepai.callStandardApi("text2img", {
+						text: "mountains",
+				});
+				console.log(resp);
+			})()
+		}
 	}
 
 	const draw = (p5) => {
