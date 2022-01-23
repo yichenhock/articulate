@@ -172,6 +172,9 @@ function CanvasComponent(props) {
 		else if (p5.key == 'r') commandQueue.push("regions");
 		else if (p5.key == 'f') commandQueue.push("fill");
 		else if (p5.key == '0') commandQueue.push("zero");
+		else if (p5.key == '1') commandQueue.push("one");
+		else if (p5.key == '2') commandQueue.push("two");
+		else if (p5.key == '3') commandQueue.push("three");
 	}
 
 	const draw = (p5) => {
