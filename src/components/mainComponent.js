@@ -10,7 +10,7 @@ function MainComponent() {
 
   const [mixing, setMixing] = useState(false); 
 
-  return (https://github.com/yichenhock/articulate/pull/6/conflict?name=src%252Fcomponents%252FmainComponent.js&ancestor_oid=c3212d1a44b3f44638c3ea104fd4071087ac2f54&base_oid=60c7a4106cb9569026548fbf24f676c65beeac11&head_oid=571c8805bf202f83a25b3520c65a97b99ae6990f
+  return (
     <div className='App'>
       <div className='top-bar'>
         <CommandContext.Consumer>
