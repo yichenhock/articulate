@@ -1,44 +1,67 @@
 import { insertFindingOccurrence } from "./occurences";
 
 export const commands = {
-    LEFT: 'left',
-    RIGHT: 'right',
-    UP: 'up',
-    DOWN: 'down',
-    RED: 'red',
-    YELLOW: 'yellow',
-    BLUE: 'blue',
-    REGIONS: 'regions',
-    FILL: 'fill',
-    ZERO: 'zero',
-    ONE: 'one',
-    TWO: 'two',
-    THREE: 'three',
+  LEFT: 'left',
+  RIGHT: 'right',
+  UP: 'up',
+  DOWN: 'down',
+  RED: 'red',
+  GREEN: 'green',
+  BLUE: 'blue',
+  GO: 'go',
+  STOP: 'stop',
+  PAINT: 'paint',
+  MOVE: 'move',
+  QUICK: 'quick',
+  SLOW: 'slow',
+  BOLD: 'bold',
+  SHRINK: 'shrink',
+  MORE: 'more',
+  LESS: 'less',
+  MIX: 'mix',
+  BLACK: 'black',
+  WHITE: 'white',
+  CLEAR: 'clear',
+  SAVE: 'save',
+  REGIONS: 'regions',
+  FILL: 'fill',
+  ZERO: 'zero',
+  ONE: 'one',
+  TWO: 'two',
+  THREE: 'three'
 };
 
-// maps spoken words to commands
-const commandWordsWithHomophones = new Map([
-  ['right', commands.RIGHT],
-  ['write', commands.RIGHT],
-  ['left', commands.LEFT],
-  ['up', commands.UP],
-  ['upward', commands.UP],
-  ['upwards', commands.UP],
-  ['down', commands.DOWN],
-]);
+
 const commandWords = new Map([
   ['right', commands.RIGHT],
   ['left', commands.LEFT],
   ['up', commands.UP],
-  ['upward', commands.UP],
   ['down', commands.DOWN],
+  ['red', commands.RED],
+  ['yellow', commands.YELLOW],
+  ['blue', commands.BLUE],
+  ['go', commands.GO],
+  ['stop', commands.STOP],
+  ['paint', commands.PAINT],
+  ['move', commands.MOVE],
+  ['quick', commands.QUICK],
+  ['slow', commands.SLOW],
+  ['bold', commands.BOLD],
+  ['shrink', commands.SHRINK],
+  ['more', commands.MORE],
+  ['less', commands.LESS],
+  ['mix', commands.MIX],
+  ['black', commands.BLACK],
+  ['white', commands.WHITE],
+  ['clear', commands.CLEAR],
+  ['save', commands.SAVE],
   ['regions', commands.REGIONS],
   ['fill', commands.FILL],
   ['flood', commands.FILL],
-  ['zero', commands.ZERO],
-  ['one', commands.ONE],
-  ['two', commands.TWO],
-  ['three', commands.THREE],
+  //['zero', commands.ZERO],
+  //['one', commands.ONE],
+  //['two', commands.TWO],
+  //['three', commands.THREE],
 ]);
 
 export function subscribeToVoiceCommands(onCommand) {
@@ -59,13 +82,13 @@ export function subscribeToVoiceCommands(onCommand) {
 
     const baseUrl = 'wss://api.deepgram.com/v1/listen';
     const paramsList = [
-        ['language', 'en-GB'],
-      ].concat(keywords.map((keyword) => ['search', keyword]));
+      ['language', 'en-GB'],
+    ].concat(keywords.map((keyword) => ['search', keyword]));
     const params = new URLSearchParams(paramsList);
 
     const url = baseUrl + '?' + params.toString();
     console.log(url);
-    
+
     const socket = new WebSocket(url, ['token', process.env.REACT_APP_DEEPGRAM_API_KEY]);
 
     // 100 - 1000 sensible range
@@ -116,5 +139,5 @@ export function subscribeToVoiceCommands(onCommand) {
     //   mic.removeEventListener('dataavailable', sendData);
     //   socket.close();
     // }
-  }); 
+  });
 }
