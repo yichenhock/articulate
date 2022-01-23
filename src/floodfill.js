@@ -44,15 +44,15 @@ function arrayEquals(a, b) {
         graphics.pixels[index + 2],
         graphics.pixels[index + 3],
       ];
-      console.log("Current x: " + current.x + ", current y: " + current.y)
-      console.log("Getting from " + (index) + ", colour " + graphics.pixels[index])
+      //console.log("Current x: " + current.x + ", current y: " + current.y)
+      //console.log("Getting from " + (index) + ", colour " + graphics.pixels[index])
   
       // Skip if this isn't a match
       if (!arrayEquals(color, seedColor)) {
         continue;
       }
   
-      console.log("Setting " + (index) + " to " + fillColor[0])
+      //console.log("Setting " + (index) + " to " + fillColor[0])
       for (let i = 0; i < 4; i++) {
           
         graphics.pixels[index+i] = fillColor[i];
