@@ -113,6 +113,14 @@ function HelpOverlay(props) {
                   <td>SAVE</td>
                   <td>Save your painting</td>
                 </tr>
+                <tr>
+                  <td>HELP</td>
+                  <td>Show this help text</td>
+                </tr>
+                <tr>
+                  <td>CLOSE</td>
+                  <td>Dismis this help text</td>
+                </tr>
               </tbody>
             </table>
           </td>
