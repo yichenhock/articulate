@@ -7,7 +7,9 @@ export const commands = {
     DOWN: 'down',
     RED: 'red',
     YELLOW: 'yellow',
-    BLUE: 'blue'
+    BLUE: 'blue',
+    REGIONS: 'regions',
+    FILL: 'fill'
 };
 
 // maps spoken words to commands
@@ -26,6 +28,8 @@ const commandWords = new Map([
   ['up', commands.UP],
   ['upward', commands.UP],
   ['down', commands.DOWN],
+  ['regions', commands.REGIONS],
+  ['fill', commands.FILL],
 ]);
 
 export function subscribeToVoiceCommands(onCommand) {
