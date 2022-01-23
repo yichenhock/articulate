@@ -149,9 +149,7 @@ function ColourPalette(props) { // props: mixing (bool), colourToMix: 'black, et
     return (
     <div  className='colour-palette'>
         <div className='small-circle' id='mixing-circle'/>
-
-        {/* <div className='pulse-circle' id='pulse-circle'/> */}
-
+        <div className='pulse-circle' id='pulse-circle'/>
         <div id='grow-circle'>
             {/* black, red, green, blue, white */}
             <div className='small-circle black' id='black'></div>
