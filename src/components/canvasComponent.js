@@ -4,9 +4,10 @@ import Vector from "../drawVector"
 import { updateDelta } from "../drawVector"
 import { subscribeToVoiceCommands, commands } from "../voiceCommands";
 import { resetRegions, getRegionSeedAndSize, floodFill } from "../floodfill";
+import { render } from "@testing-library/react";
 
-const canvasWidth = 200;
-const canvasHeight = 200;
+const canvasWidth = 750;
+const canvasHeight = 500;
 
 let currentPos = new Vector(canvasWidth / 2, canvasHeight / 2);
 let currentDelta = new Vector(0, 0);
@@ -34,7 +35,7 @@ function CanvasComponent(props) {
 	const setup = (p5, canvasParentRef) => {
 		// use parent to render the canvas in this ref
 		// (without that p5 will render the canvas outside of your component)
-		p5.pixelDensity(3);
+		p5.pixelDensity(1);
 		p5.createCanvas(canvasWidth, canvasHeight).parent(canvasParentRef);
 		p5.background(255, 255, 255);
 
@@ -60,6 +61,12 @@ function CanvasComponent(props) {
 			break;
 		case commands.FILL:
 			fillAtPen(p5);
+			break;
+		case commands.ZERO:
+		case commands.ONE:
+		case commands.TWO:
+		case commands.THREE:
+			jumpPenToRegion(p5, command);
 			break;
 		default:
 			console.log("unhandled " + command);
@@ -108,6 +115,33 @@ function CanvasComponent(props) {
 		renderPainting(p5);
 	};
 
+	const jumpPenToRegion = (p5, region_index_str) => {
+		console.log("Going to attempt to jump to " + region_index_str)
+		let region_index = {"zero":0, "one":1, "two":2, "three":3}[region_index_str]
+		console.log("Translated to index " + region_index)
+
+		if (region_index >= discovered_region_objs.length) {
+			console.log("Cancelling; no region exists")
+			return
+		}
+		currentPos.x = discovered_region_objs[region_index].x;
+		currentPos.y = discovered_region_objs[region_index].y;
+
+		console.log("Jumping to " + currentPos.x + ", " + currentPos.y)
+
+		//drawing_layer.strokeWeight(4);
+
+		currentDelta.x = 0;
+		currentDelta.y = 0;
+
+		if (currentPos.x < 0) currentPos.x = 0;
+		if (currentPos.x >= canvasWidth) currentPos.x = canvasWidth - 1;
+		if (currentPos.y < 0) currentPos.y = 0;
+		if (currentPos.y >= canvasWidth) currentPos.y = canvasHeight - 1;
+
+		renderPainting(p5, false);
+	}
+
 	const movePen = (p5) => {
 		let newX = currentPos.x + currentDelta.x * velocity;
 		let newY = currentPos.y + currentDelta.y * velocity;
@@ -137,6 +171,7 @@ function CanvasComponent(props) {
 		else if (p5.key == 'ArrowLeft') commandQueue.push("left");
 		else if (p5.key == 'r') commandQueue.push("regions");
 		else if (p5.key == 'f') commandQueue.push("fill");
+		else if (p5.key == '0') commandQueue.push("zero");
 	}
 
 	const draw = (p5) => {
