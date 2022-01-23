@@ -20,7 +20,8 @@ export const commands = {
   MIX: 'mix',
   BLACK: 'black',
   WHITE: 'white',
-  CLEAR: 'clear'
+  CLEAR: 'clear',
+  SAVE: 'save',
 };
 
 const commandWords = new Map([
@@ -45,7 +46,8 @@ const commandWords = new Map([
   ['mix', commands.MIX],
   ['black', commands.BLACK],
   ['white', commands.WHITE],
-  ['clear', commands.CLEAR]
+  ['clear', commands.CLEAR],
+  ['save', commands.SAVE]
 ]);
 
 export function subscribeToVoiceCommands(onCommand) {

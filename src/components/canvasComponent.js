@@ -24,8 +24,9 @@ let mixMore = false;
 let mixLess = false;
 let colorIncrement = 51;
 
-// using RGB for colours
 let currentColour = [0, 0, 0];
+
+let justSaved = false;
 
 let commandQueue = [];
 
@@ -220,6 +221,10 @@ function CanvasComponent(props) {
 				p5.background(255, 255, 255);
 				currentPos = new Vector(canvasWidth / 2, canvasHeight / 2);
 				break;
+			case commands.SAVE:
+				p5.saveCanvas(p5.canvas, 'articulate', 'jpg');
+				justSaved = true;
+				break;
 			default:
 				console.log("unhandled " + command);
 		}
@@ -248,7 +253,10 @@ function CanvasComponent(props) {
 		if (commandQueue.length > 0) {
 			while (commandQueue.length > 0) {
 				const command = commandQueue.shift();
-				handleCommand(command, p5);
+				if (!(command == commands.SAVE && justSaved)) {
+					justSaved = false;
+					handleCommand(command, p5);
+				}
 			}
 		} else {
 			if (going) {
