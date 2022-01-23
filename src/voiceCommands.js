@@ -1,12 +1,26 @@
 
 export const commands = {
-    LEFT: 'left',
-    RIGHT: 'right',
-    UP: 'up',
-    DOWN: 'down',
-    RED: 'red',
-    YELLOW: 'yellow',
-    BLUE: 'blue'
+  LEFT: 'left',
+  RIGHT: 'right',
+  UP: 'up',
+  DOWN: 'down',
+  RED: 'red',
+  GREEN: 'green',
+  BLUE: 'blue',
+  GO: 'go',
+  STOP: 'stop',
+  PAINT: 'paint',
+  MOVE: 'move',
+  QUICK: 'quick',
+  SLOW: 'slow',
+  BOLD: 'bold',
+  SHRINK: 'shrink',
+  MORE: 'more',
+  LESS: 'less',
+  MIX: 'mix',
+  BLACK: 'black',
+  WHITE: 'white',
+  CLEAR: 'clear'
 };
 
 const commandWords = new Map([
@@ -14,12 +28,24 @@ const commandWords = new Map([
   ['write', commands.RIGHT],
   ['left', commands.LEFT],
   ['up', commands.UP],
-  ['upward', commands.UP],
-  ['upwards', commands.UP],
   ['down', commands.DOWN],
   ['red', commands.RED],
   ['yellow', commands.YELLOW],
   ['blue', commands.BLUE],
+  ['go', commands.GO],
+  ['stop', commands.STOP],
+  ['paint', commands.PAINT],
+  ['move', commands.MOVE],
+  ['quick', commands.QUICK],
+  ['slow', commands.SLOW],
+  ['bold', commands.BOLD],
+  ['shrink', commands.SHRINK],
+  ['more', commands.MORE],
+  ['less', commands.LESS],
+  ['mix', commands.MIX],
+  ['black', commands.BLACK],
+  ['white', commands.WHITE],
+  ['clear', commands.CLEAR]
 ]);
 
 export function subscribeToVoiceCommands(onCommand) {
@@ -40,14 +66,14 @@ export function subscribeToVoiceCommands(onCommand) {
 
     const baseUrl = 'wss://api.deepgram.com/v1/listen';
     const params = new URLSearchParams([
-    ['language', 'en-GB']
-    ] 
-    // + keywords.map((keyword) => ['keyword', keyword])
+      ['language', 'en-GB']
+    ]
+      // + keywords.map((keyword) => ['keyword', keyword])
     );
 
     const url = baseUrl + '?' + params.toString();
     console.log(url);
-    
+
     const socket = new WebSocket(url, ['token', process.env.REACT_APP_DEEPGRAM_API_KEY]);
 
     // 100 - 1000 sensible range
@@ -65,15 +91,15 @@ export function subscribeToVoiceCommands(onCommand) {
       const transcript = alt0.transcript;
       console.log(transcript);
       const words = alt0.words.map((word) => word.word);
-      
+
       for (const word of words) {
-          if (commandWords.has(word)) {
-            const command = commandWords.get(word)
-            // commands.push(command);
-            onCommand(command);
-            // check if finalised/overlap
-            // (use time)
-          }
+        if (commandWords.has(word)) {
+          const command = commandWords.get(word)
+          // commands.push(command);
+          onCommand(command);
+          // check if finalised/overlap
+          // (use time)
+        }
       }
 
       // let newCommandLog = commandLog.slice();
@@ -90,5 +116,5 @@ export function subscribeToVoiceCommands(onCommand) {
     //   mic.removeEventListener('dataavailable', sendData);
     //   socket.close();
     // }
-  }); 
+  });
 }
