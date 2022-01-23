@@ -9,7 +9,6 @@ import './styles.css'
 function MainComponent() {
 
   const [mixing, setMixing] = useState(false); 
-
   const [helpDisplay, setHelpDisplay] = useState(false); 
 
   return (
