@@ -55,6 +55,10 @@ function HelpOverlay(props) {
                   <td>MOVE</td>
                   <td>Move the brush off the canvas</td>
                 </tr>
+                <tr>
+                  <td>REGIONS</td>
+                  <td>Display and number enclosed regions</td>
+                </tr>
               </tbody>
             </table>
           </td>
@@ -96,6 +100,10 @@ function HelpOverlay(props) {
                 <tr>
                   <td>WHITE</td>
                   <td>Mix a white paint</td>
+                </tr>
+                <tr>
+                  <td>FILL</td>
+                  <td>Fill in an area at cursor position</td>
                 </tr>
                 <tr>
                   <td>CLEAR</td>
