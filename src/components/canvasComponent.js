@@ -34,7 +34,7 @@ function CanvasComponent(props) {
 	const setup = (p5, canvasParentRef) => {
 		// use parent to render the canvas in this ref
 		// (without that p5 will render the canvas outside of your component)
-		p5.pixelDensity(1);
+		p5.pixelDensity(3);
 		p5.createCanvas(canvasWidth, canvasHeight).parent(canvasParentRef);
 		p5.background(255, 255, 255);
 
@@ -58,6 +58,9 @@ function CanvasComponent(props) {
 		case "regions":
 			identifyAllRegions(p5);
 			break;
+		case "fill":
+			fillAtPen(p5);
+			break;
 		default:
 			console.log("unhandled " + command);
 		}
@@ -66,14 +69,15 @@ function CanvasComponent(props) {
 	const identifyAllRegions = (p5) => {
 		discovered_region_seeds = new Set();
 		discovered_region_objs = [];
-		//text_layer.clear();f
 		
-		const min_region_size = 1000
+		const min_region_size = 1000 * p5.pixelDensity() * p5.pixelDensity() * p5.pixelDensity()
 		resetRegions();
 		text_layer.clear()
 		
-		for (let x = drawing_layer.width/10; x < drawing_layer.width; x+=drawing_layer.width/10) {
-		  for (let y = drawing_layer.height/10; y < drawing_layer.height; y+=drawing_layer.height/10) {
+		let w = drawing_layer.width * p5.pixelDensity();
+		let h = drawing_layer.height * p5.pixelDensity();
+		for (let x = Math.round(w/10); x < w; x+=Math.round(w/10)) {
+		  for (let y = Math.round(h/10); y < h; y+=Math.round(h/10)) {
 			  let region_data = getRegionSeedAndSize(p5, p5.createVector(x,y), drawing_layer)
 			  let region = new Region(region_data[0], region_data[1], region_data[0], x, y)
 	  
@@ -82,7 +86,7 @@ function CanvasComponent(props) {
 			  if(region.size >= min_region_size && !(region.seed in discovered_region_seeds)){
 				discovered_region_seeds.add(region.seed)
 				discovered_region_objs = discovered_region_objs.concat(region)
-				text_layer.text(discovered_region_objs.length-1, x, y);
+				text_layer.text(discovered_region_objs.length-1, x/p5.pixelDensity(), y/p5.pixelDensity());
 			  }
 		  }
 		}
@@ -97,17 +101,19 @@ function CanvasComponent(props) {
 		if(show_text) p5.image(text_layer, 0, 0)
 	  }
 
+	const fillAtPen = (p5) => {
+		
+		floodFill(p5, p5.createVector(Math.round(currentPos.x*p5.pixelDensity()), Math.round(currentPos.y*p5.pixelDensity())), [255, 0, 0, 255], drawing_layer)
+		console.log("Flooded")
+		renderPainting(p5);
+	};
+
 	const movePen = (p5) => {
-		console.log("currentPos.x: " + currentPos.x)
-		console.log("currentDelta.x: " + currentDelta.x)
-		console.log("velocity: " + velocity)
 		let newX = currentPos.x + currentDelta.x * velocity;
-		console.log("newX: " + newX)
 		let newY = currentPos.y + currentDelta.y * velocity;
 		//drawing_layer.strokeWeight(4);
 		drawing_layer.noSmooth();
 		drawing_layer.line(currentPos.x, currentPos.y, newX, newY);
-		console.log("newX: " + newX)
 		currentPos.x = newX;
 		currentPos.y = newY;
 
@@ -125,7 +131,8 @@ function CanvasComponent(props) {
 		else if (p5.key == 'ArrowDown') commandQueue.push("down");
 		else if (p5.key == 'ArrowRight') commandQueue.push("right");
 		else if (p5.key == 'ArrowLeft') commandQueue.push("left");
-		else if (p5.key == ' ') commandQueue.push("regions");
+		else if (p5.key == 'r') commandQueue.push("regions");
+		else if (p5.key == 'f') commandQueue.push("fill");
 	}
 
 	const draw = (p5) => {

@@ -12,17 +12,19 @@ function arrayEquals(a, b) {
     let y = current.y
     
     if(x-1>0){queue.push(p5.createVector(x-1,y))}
-    if(x+1<graphics.width){queue.push(p5.createVector(x+1,y))} 
+    if(x+1<graphics.width * p5.pixelDensity()){queue.push(p5.createVector(x+1,y))} 
     if(y-1>0){queue.push(p5.createVector(x,y-1))}
-    if(y+1<graphics.height){queue.push(p5.createVector(x,y+1))}
+    if(y+1<graphics.height * p5.pixelDensity()){queue.push(p5.createVector(x,y+1))}
     
     return queue
   }
   
   export function floodFill(p5, seed, fillColor, graphics) {
     graphics.loadPixels();
+
+    console.log("Flooding at " + seed.x + ", " + seed.y)
   
-    let index = 4 * (graphics.width * seed.y + seed.x);
+    let index = 4 * (graphics.width * p5.pixelDensity() * seed.y + seed.x);
     let seedColor = [
       graphics.pixels[index],
       graphics.pixels[index + 1],
@@ -34,21 +36,26 @@ function arrayEquals(a, b) {
     queue.push(seed);
     while (queue.length) {
       let current = queue.shift();
-      let index = 4 * (graphics.width * current.y + current.x);
+
+      let index = 4 * (graphics.width * p5.pixelDensity() * current.y + current.x);
       let color = [
         graphics.pixels[index],
         graphics.pixels[index + 1],
         graphics.pixels[index + 2],
         graphics.pixels[index + 3],
       ];
+      console.log("Current x: " + current.x + ", current y: " + current.y)
+      console.log("Getting from " + (index) + ", colour " + graphics.pixels[index])
   
       // Skip if this isn't a match
       if (!arrayEquals(color, seedColor)) {
         continue;
       }
   
+      console.log("Setting " + (index) + " to " + fillColor[0])
       for (let i = 0; i < 4; i++) {
-        graphics.pixels[index+i] = fillColor[0 + i];
+          
+        graphics.pixels[index+i] = fillColor[i];
       }
       
       queue = expandToNeighbours(p5,graphics,queue, current)  
@@ -62,11 +69,11 @@ function arrayEquals(a, b) {
   export function resetRegions() {
     index_to_region = {};
   }
-  
+
   export function getRegionSeedAndSize(p5, seed, graphics) {
     graphics.loadPixels();
   
-    let seed_index = 4 * (graphics.width * seed.y + seed.x);
+    let seed_index =  4 * (p5.pixelDensity() * graphics.width * seed.y + seed.x);
     if (seed_index in index_to_region) {
       //console.log("Selected existing region " + index_to_region[seed_index])
       return [index_to_region[seed_index], -1]
@@ -85,10 +92,7 @@ function arrayEquals(a, b) {
     let region_size = 0;
     while (queue.length) {
       let current = queue.shift();
-      let index = 4 * (graphics.width * current.y + current.x);
-      //console.log("We think that we are to look at y coord " + current.y + ", x coord " + current.x)
-      //console.log("Theoretically, there should be " + 4 * graphics.width * graphics.height + " pixels in graphics. Actually, there are " + graphics.pixels.length)
-      //console.log("graphics.width=" + graphics.width + ". graphics.width * p5.pixelDensity=" + graphics.displayWidth*p5.pixelDensity)
+      let index =  4 * (p5.pixelDensity() * graphics.width * current.y + current.x);
 
       // Skip if this already has a REGION
       if (index in index_to_region) {
