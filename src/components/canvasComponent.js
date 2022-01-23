@@ -65,8 +65,6 @@ function CanvasComponent(props) {
 			props.setCommand(command);
 			handleCommand(command, p5);
 		}
-
-		console.log(JSON.stringify(currentPos));
 	};
 
 	const keyPressed = (p5) => {
