@@ -114,22 +114,21 @@ function ColourPalette(props) { // props: mixing (bool), colourToMix: 'black, et
 
         } else if (props.colourToMix[1]==false){ // or less
 
-            // pulsate out the colour? 
-            // var mixing_circle = document.getElementById('mixing-circle');
-            // mixing_circle.style.strokeWidth = '5em';
-            // mixing_circle.style.stroke = props.colourToMix[0];
+            var pulse_circle = document.getElementById('pulse-circle');
+            pulse_circle.style.backgroundColor = props.colourToMix[0];
+            pulse_circle.style.display = 'block';
+            pulse_circle.style.animation = 'pulse 1s ease-out';
 
-            // let timer = setTimeout(()=>{
-            //     shrinkPalette();
-            // },2500)
+            let timer = setTimeout(()=>{
+                pulse_circle.style.display = 'none';
+                pulse_circle.style.animation = 'none';
+
+                shrinkPalette();
+            },2500)
             
-            // return()=>{
-            //     clearTimeout(timer);
-            // }
-
-            // too tired to code this :///
-
-            shrinkPalette(); 
+            return()=>{
+                clearTimeout(timer);
+            }
 
         } else{ // or just change colour
             shrinkPalette();
@@ -149,9 +148,7 @@ function ColourPalette(props) { // props: mixing (bool), colourToMix: 'black, et
     return (
     <div  className='colour-palette'>
         <div className='small-circle' id='mixing-circle'/>
-
-        {/* <div className='pulse-circle' id='pulse-circle'/> */}
-
+        <div className='pulse-circle' id='pulse-circle'/>
         <div id='grow-circle'>
             {/* black, red, green, blue, white */}
             <div className='small-circle black' id='black'></div>
