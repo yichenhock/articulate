@@ -43,15 +43,19 @@ const commandWords = new Map([
   ['up', commands.UP],
   ['upwards', commands.UP],
   ['down', commands.DOWN],
+
   ['red', commands.RED],
   ['green', commands.GREEN],
   ['blue', commands.BLUE],
+
   ['go', commands.GO],
   ['stop', commands.STOP],
+
   ['paint', commands.PAINT],
   ['move', commands.MOVE],
   ['quick', commands.QUICK],
   ['slow', commands.SLOW],
+
   ['bold', commands.BOLD],
   ['shrink', commands.SHRINK],
   ['more', commands.MORE],
@@ -59,8 +63,10 @@ const commandWords = new Map([
   ['mix', commands.MIX],
   ['black', commands.BLACK],
   ['white', commands.WHITE],
+
   ['clear', commands.CLEAR],
   ['save', commands.SAVE],
+
   ['regions', commands.REGIONS],
   ['fill', commands.FILL],
   ['flood', commands.FILL],
@@ -74,6 +80,47 @@ const commandWords = new Map([
   ['seven', commands.SEVEN],
 ]);
 
+const words1 = [
+  ['right'],
+  ['left'],
+  ['up'],
+  ['upwards'],
+  ['down'],
+  ['go'],
+  ['stop'],
+  ['paint', commands.PAINT],
+  ['move', commands.MOVE],
+  ['quick', commands.QUICK],
+  ['slow', commands.SLOW],
+];
+
+const words2 = [
+  ['bold', commands.BOLD],
+  ['shrink', commands.SHRINK],
+  ['more', commands.MORE],
+  ['less', commands.LESS],
+  ['mix', commands.MIX],
+  ['black', commands.BLACK],
+  ['white', commands.WHITE],
+  ['red', commands.RED],
+  ['green', commands.GREEN],
+  ['blue', commands.BLUE],
+  ['clear', commands.CLEAR],
+  ['save', commands.SAVE],
+
+  ['regions', commands.REGIONS],
+  ['fill', commands.FILL],
+  ['flood', commands.FILL],
+  ['zero', commands.ZERO],
+  ['one', commands.ONE],
+  ['two', commands.TWO],
+  ['three', commands.THREE],
+  ['four', commands.FOUR],
+  ['five', commands.FIVE],
+  ['six', commands.SIX],
+  ['seven', commands.SEVEN],
+
+];
 
 export function subscribeToVoiceCommands(onCommand) {
   // TODO: more boilerplate to support safari
@@ -109,6 +156,7 @@ export function subscribeToVoiceCommands(onCommand) {
 
       socket.onmessage = message => {
         const received = JSON.parse(message.data);
+        if (!received.channel) return;
         const alt0 = received.channel.alternatives[0];
         const search = received.channel.search;
 
@@ -141,16 +189,18 @@ export function subscribeToVoiceCommands(onCommand) {
 
     };
 
-    const keywords = [...commandWords.keys()];
-    let socketKeywords = [[], []];
-    for (let i = 0; i < keywords.length; i++) {
-      socketKeywords[i % 2].push(keywords[i]);
-    }
+    // const keywords = [...commandWords.keys()];
+    // let socketKeywords = [[], []];
+    // for (let i = 0; i < keywords.length; i++) {
+    //   socketKeywords[i % 2].push(keywords[i]);
+    // }
+
+    console.log(`${words1.length} + ${words2.length} ?= ${[...commandWords.keys()].length}`)
 
     let open1 = false;
     let open2 = false;
-    const socket1 = listenForKeywords(socketKeywords[0], process.env.REACT_APP_DEEPGRAM_API_KEY, 1)
-    const socket2 = listenForKeywords(socketKeywords[1], process.env.REACT_APP_DEEPGRAM_API_KEY_2, 2)
+    const socket1 = listenForKeywords(words1, process.env.REACT_APP_DEEPGRAM_API_KEY, 1)
+    const socket2 = listenForKeywords(words2, process.env.REACT_APP_DEEPGRAM_API_KEY_2, 2)
 
     const sendData = event => {
       socket1.send(event.data)
