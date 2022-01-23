@@ -5,8 +5,8 @@ import { updateDelta } from "../drawVector"
 import { subscribeToVoiceCommands, commands } from "../voiceCommands";
 import { resetRegions, getRegionSeedAndSize, floodFill } from "../floodfill";
 
-const canvasWidth = 200;
-const canvasHeight = 200;
+const canvasWidth = 750;
+const canvasHeight = 500;
 
 let currentPos = new Vector(canvasWidth / 2, canvasHeight / 2);
 let currentDelta = new Vector(0, 0);
