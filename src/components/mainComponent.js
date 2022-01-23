@@ -17,8 +17,11 @@ function MainComponent() {
       
       <GridLines className="grid-area" cellWidth={120} lineColor={'rgb(60, 60, 60)'} strokeWidth={1} cellWidth2={24} lineColor2={'rgb(60, 60, 60)'}>
         <div className='canvas-area'>
-          {/* <button onClick={()=>{setMixing(!mixing)}}></button> */}
-          <CanvasComponent/>
+        <CommandContext.Consumer>
+          {({ setCommand }) => (
+            <CanvasComponent setCommand={setCommand}/>
+          )}
+        </CommandContext.Consumer>
         </div>
         
         <div>
