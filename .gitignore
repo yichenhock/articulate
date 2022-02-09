@@ -83,3 +83,6 @@ typings/
 .fusebox/
 
 .history/
+
+# Local Netlify folder
+.netlify
