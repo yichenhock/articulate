@@ -106,7 +106,7 @@ function ColourPalette(props) { // props: mixing (bool), colourToMix: 'black, et
             let timer = setTimeout(()=>{
                 ball.elem.parentElement.removeChild(ball.elem); 
                 shrinkPalette();
-            },2500)
+            },600)
             
             return()=>{
                 clearTimeout(timer);
@@ -117,14 +117,14 @@ function ColourPalette(props) { // props: mixing (bool), colourToMix: 'black, et
             var pulse_circle = document.getElementById('pulse-circle');
             pulse_circle.style.backgroundColor = props.colourToMix[0];
             pulse_circle.style.display = 'block';
-            pulse_circle.style.animation = 'pulse 1s ease-out';
+            pulse_circle.style.animation = 'pulse 0.5s ease-out';
 
             let timer = setTimeout(()=>{
                 pulse_circle.style.display = 'none';
                 pulse_circle.style.animation = 'none';
 
                 shrinkPalette();
-            },2500)
+            },600)
             
             return()=>{
                 clearTimeout(timer);
