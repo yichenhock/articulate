@@ -20,7 +20,7 @@ let paint = true;
 let going = false;
 
 let strokeSize = 8;
-let strokeIncrement = 1;
+let strokeIncrement = 2;
 let mix = false;
 let mixMore = false;
 let mixLess = false;
