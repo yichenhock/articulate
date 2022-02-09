@@ -20,11 +20,11 @@ let paint = true;
 let going = false;
 
 let strokeSize = 8;
-let strokeIncrement = 1;
+let strokeIncrement = 2;
 let mix = false;
 let mixMore = false;
 let mixLess = false;
-let colorIncrement = 51;
+let colorIncrement = 70;
 
 let currentColour = [0, 0, 0];
 
