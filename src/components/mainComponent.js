@@ -11,13 +11,14 @@ function MainComponent() {
 
   const [mixing, setMixing] = useState(false); 
   const [helpDisplay, setHelpDisplay] = useState(false); 
+  const [directionIndicator, setDirectionIndicator] = React.useState(true);
 
   return (
     <div className='App'>
       <div className='top-bar'>
         <CommandContext.Consumer>
           {({ command }) => (
-            <TopBarComponent cmdText={command} helpDisplay={helpDisplay} setHelpDisplay={setHelpDisplay}/>
+            <TopBarComponent cmdText={command} helpDisplay={helpDisplay} setHelpDisplay={setHelpDisplay} setChecked={setDirectionIndicator}/>
           )}
         </CommandContext.Consumer>
       </div>
@@ -43,7 +44,7 @@ function MainComponent() {
         <div className='canvas-area'>
         <CommandContext.Consumer>
           {({ setCommand, setCurrentColour, setColourToMix }) => (
-            <CanvasComponent setCommand={setCommand} setCurrentColour={setCurrentColour} setColourToMix={setColourToMix}/>
+            <CanvasComponent setCommand={setCommand} setCurrentColour={setCurrentColour} setColourToMix={setColourToMix} directionIndicator={directionIndicator}/>
           )}
         </CommandContext.Consumer>
         </div>
