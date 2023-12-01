@@ -389,6 +389,13 @@ function CanvasComponent(props) {
 		mouse_layer.stroke(0);
 		mouse_layer.ellipse(currentPos.x, currentPos.y, strokeSize, strokeSize);
 
+		let dirX = currentPos.x + currentDelta.x*50
+		let dirY = currentPos.y + currentDelta.y*50
+		if (props.directionIndicator){
+			mouse_layer.stroke(255,0,0);
+			mouse_layer.line(currentPos.x, currentPos.y, dirX, dirY);
+		}
+
 		renderPainting(p5);
 	};
 
@@ -428,6 +435,20 @@ function CanvasComponent(props) {
 			if (going) {
 				mouse_layer.clear();
 				movePen(p5);
+			} else {
+				mouse_layer.clear();
+				mouse_layer.noFill();
+				mouse_layer.stroke(0);
+				mouse_layer.ellipse(currentPos.x, currentPos.y, strokeSize, strokeSize);
+
+				let dirX = currentPos.x + currentDelta.x*50
+				let dirY = currentPos.y + currentDelta.y*50
+				if (props.directionIndicator){
+					mouse_layer.stroke(255,0,0);
+					mouse_layer.line(currentPos.x, currentPos.y, dirX, dirY);
+				}
+
+				renderPainting(p5);
 			}
 		}
 
